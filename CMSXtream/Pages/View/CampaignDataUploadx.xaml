@@ -1,0 +1,182 @@
+﻿<UserControl x:Class="CMSXtream.Pages.View.CampaignDataUploadx"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:CMSXtream.Handlers"
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d">
+    <UserControl.Resources >
+        <!---need to add icons like delete-->
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/StyleResource/DataGridStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/StyleResource/IconLibrary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <local:IntValueToVisibilityConverter x:Key="IntToVisibilityConverter" />
+            <!---currently not use -->
+            <local:IntOfTwoColumnToVisibilityConverterExeclDupplicate x:Key="IntOfTwoColumnToVisibilityConverterExeclDupplicate"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Margin="0,0,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25"  />
+            <ColumnDefinition Width="100"  />
+            <ColumnDefinition Width="100"  />
+            <ColumnDefinition Width="100"  />
+            <ColumnDefinition Width="150"  />
+            <ColumnDefinition Width="100"  />
+            <ColumnDefinition Width="300"  />
+            <ColumnDefinition Width="140"  />
+            <ColumnDefinition Width="100"  />
+            <ColumnDefinition Width="*"  />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+         <ComboBox x:Name="CAMP_COMBO" HorizontalAlignment="Left" Height="28"  VerticalAlignment="Top" Width="270" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
+        <Button x:Name="BrowseBtn" Content="Browse" HorizontalAlignment="Left" Height="27"  VerticalAlignment="Top" Click="BrowseBtn_Click" Grid.Row="0" Grid.Column="1"/>
+        <Label x:Name="path_lbl" Content="File path" HorizontalAlignment="Left" Height="19" VerticalAlignment="Top" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="8"/>
+        <mui:ModernButton x:Name="btnRefresh" HorizontalAlignment="Left"  IconData="{Binding Data, Source={StaticResource ImgRefresh}}"  EllipseDiameter="20" EllipseStrokeThickness="1" ToolTip="Reload Campaign List" Click="btnRefresh_Click" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
+        <Button x:Name="excelReadbtn" Content="Read File" HorizontalAlignment="Left" Height="27" VerticalAlignment="Top" Click="excelReadbtn_Click" Grid.Row="1" Grid.Column="1" />
+        <Button x:Name="DbUploadbtn" Content="Upload" HorizontalAlignment="Left" Height="28"  VerticalAlignment="Center" Width="115" Click="DbUploadbtn_Click" Grid.Row="2" Grid.Column="7"/>
+        <Button x:Name="btnViewHistory" Content="History" HorizontalAlignment="Left" Height="28"  VerticalAlignment="Center" Width="80" Click="btnViewHistory_Click" Grid.Row="1" Grid.Column="7"/>
+        <Label Content="Total Records :" HorizontalAlignment="Left" Height="20" VerticalAlignment="Center" Width="91" FontWeight="Bold" Grid.Row="1"  Grid.Column="2"/>
+        <Label x:Name="lblRecordCount" Content="0" HorizontalAlignment="Left" Height="20"  VerticalAlignment="Center" Width="54" FontWeight="Bold" Grid.Row="1"  Grid.Column="3"/>
+        <TextBox x:Name="txtAddName"  Height="30" Text="" Grid.Row="2"  Grid.Column="5" Grid.ColumnSpan="2" Width="300"/>
+        <DatePicker x:Name="dtpAddDate" Grid.Row="2" Width="140" Height="30" Grid.Column="4" SelectedDate="{x:Static sys:DateTime.Now}"> 
+        </DatePicker>
+        <GroupBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="9" Margin="0,10,0,0" Height="600" >
+            <GroupBox.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="230"/>
+                        <ColumnDefinition Width="165"/>
+                        <ColumnDefinition Width="165"/>
+                        <ColumnDefinition Width="265"/>
+                        <ColumnDefinition Width="165"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Row="0" Grid.Column="0"  BorderThickness="1" CornerRadius="5,0,5,0" BorderBrush="Black" Height="20" Background="Yellow" RenderTransformOrigin="0.4,-0.35" Width="225" HorizontalAlignment="Left" />
+                    <Label Content="Mobile No and Name already exists" Height="25" Foreground="Black" Grid.Column="0" HorizontalAlignment="Left" Margin="7,6,0,0" />
+                    <Border Grid.Row="0" Grid.Column="1"  BorderThickness="1" CornerRadius="5,0,5,0" BorderBrush="Black" Height="20" Background="YellowGreen" RenderTransformOrigin="0.4,-0.35" Width="160" HorizontalAlignment="Left" />
+                    <Label Content="Mobile No already exists" Height="25" Foreground="Black" Grid.Column="1" HorizontalAlignment="Left" Margin="7,6,0,0" />
+                    <Border Grid.Row="0" Grid.Column="2"  BorderThickness="1" CornerRadius="5,0,5,0" BorderBrush="Black" Height="20" Background="GreenYellow" RenderTransformOrigin="0.4,-0.35" Width="160" HorizontalAlignment="Left" />
+                    <Label Content="Name already exists" Height="25" Foreground="Black" Grid.Column="2" HorizontalAlignment="Left" Margin="7,6,0,0" />
+                    <Border Grid.Row="0" Grid.Column="3"  BorderThickness="1" CornerRadius="5,0,5,0" BorderBrush="Black" Height="20" Background="red" RenderTransformOrigin="0.4,-0.35" Width="260" HorizontalAlignment="Left" />
+                    <Label Content="Invalid charactors are found and Removed" Height="25" Foreground="Black" Grid.Column="3" HorizontalAlignment="Left" Margin="7,6,0,0" />
+                    <Border Grid.Row="0" Grid.Column="4"  BorderThickness="1" CornerRadius="5,0,5,0" BorderBrush="Black" Height="20" Background="HotPink" RenderTransformOrigin="0.4,-0.35" Width="160" HorizontalAlignment="Left" />
+                    <Label Content="Invalid Mobile No" Height="25" Foreground="Black" Grid.Column="4" HorizontalAlignment="Left" Margin="7,6,0,0" />
+
+                </Grid>
+            </GroupBox.Header>
+        <DataGrid x:Name="grid" HorizontalAlignment="Left" Height="AUTO"  VerticalAlignment="Top" Width="Auto"  AutoGenerateColumns="false" CanUserAddRows="False" CanUserDeleteRows="False" HeadersVisibility="Column" 
+                  FontSize="14" IsReadOnly="False" Background="White" >
+
+            <!-- SET COMMEn COLUR TO ALL HEADERS Text color -->
+            <DataGrid.Columns>
+                <!-- row id   -->
+                <DataGridTextColumn Width="10" Header="row_id" Binding="{Binding Path=Row_id}" Visibility="Hidden"   />
+                <!-- Visibility="Hidden" to hide cmp_id column-->
+                <!-- duplicate   --> 
+                    <!-- Visibility="Hidden" to hide cmp_id column-->
+                <DataGridTextColumn Width="*" Header="Full Name" Binding="{Binding Path=FULL_NAME}" />
+                    <DataGridTextColumn Width="10" Header="Duplicate" Binding="{Binding Path=Dupplicate}" Visibility="Hidden" />
+                    <DataGridTemplateColumn x:Name="clmHistory" Width="38"  >
+                        <DataGridTemplateColumn.CellTemplate  >
+                            <DataTemplate  >
+                                <mui:ModernButton x:Name="btnHistory" IconData="{Binding Data, Source={StaticResource ImgHistory}}" EllipseDiameter="24" EllipseStrokeThickness="1" ToolTip="Show history"  Click="btnHistory_Click" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <!--binding path is sql data column name -->
+                <DataGridTextColumn Width="125" Header="Unprocessed phone no" Binding="{Binding Path=MOBILE}" IsReadOnly="True" />
+                <!--<DataGridTextColumn Width="100" Header="1st Name" Binding="{Binding Path=name_1}" />
+                <DataGridTextColumn Width="100" Header="Last Name" Binding="{Binding Path=name_2}" />-->
+                <DataGridTextColumn Width="100" Header="Mobile" Binding="{Binding Path=phone}" />
+                <DataGridTextColumn Width="100" Header="bandscore" Binding="{Binding Path=bandscore}" />
+                <DataGridTextColumn Width="100" Header="exam_type" Binding="{Binding Path=exam_type}" />
+                <DataGridTextColumn Width="170" Header="when_do_you_want" Binding="{Binding Path=when_do_you_want}" />
+                <DataGridTextColumn Width="170" Header="your_english_knowledge" Binding="{Binding Path=your_english_knowledge}" />
+                <DataGridTextColumn Width="170" Header="your_ielts_knowledge" Binding="{Binding Path=your_ielts_knowledge}" />
+                <DataGridTextColumn Width="55" Header="Att.No" Binding="{Binding Path=MOBILE_NO_DUP_SEQ}" IsReadOnly="True" />
+                <!-- Column 4: Delete Button -->
+                <DataGridTemplateColumn Header="" Width="45">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <!-- <Button Content="Click Me" Click="Button_Delete" />-->
+                            <mui:ModernButton x:Name="btnDelete" IconData="{Binding Data, Source={StaticResource ImgDelete}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Delete Lable"  Click="btnDelete_Click" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="" Width="45" Visibility="Hidden">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <!-- <Button Content="Click Me" Click="Button_edit" />-->
+                            <mui:ModernButton x:Name="btnedit" IconData="{Binding Data, Source={StaticResource ImgEdit}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="EDIT  ROW"  Click="btnedit_Click" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn  Width="30" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <mui:ModernButton x:Name="btnWarning" IconData="{Binding Data, Source={StaticResource ImgAlert}}"  EllipseDiameter="25" EllipseStrokeThickness="0">
+                                <mui:ModernButton.IconWidth>20</mui:ModernButton.IconWidth>
+                                <mui:ModernButton.IconHeight>20</mui:ModernButton.IconHeight>
+                                <mui:ModernButton.Visibility>
+                                    <MultiBinding Converter="{StaticResource IntOfTwoColumnToVisibilityConverterExeclDupplicate}">
+                                        <Binding Path="Dupplicate" />
+                                        <Binding Path="INVALID_REC" />
+                                        <!-- Add additional bindings as needed -->
+                                    </MultiBinding>
+                                </mui:ModernButton.Visibility>
+                            </mui:ModernButton>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Dupplicate}" Value="0">
+                                        <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Dupplicate}" Value="2" >
+                                    <Setter Property="Background" Value="YellowGreen" />
+                                    <Setter Property ="ToolTip" Value="Record is already exist (Only Mobile NUmber)"/>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding Dupplicate}" Value="3" >
+                                    <Setter Property="Background" Value="GreenYellow" />
+                                    <Setter Property ="ToolTip" Value="Record is already exist (Only Student Name)"/>
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding INVALID_REC}" Value="1">
+                                    <Setter Property="Background" Value="Red" />
+                                    <Setter Property="ToolTip" Value="Invalid charactors are found and Removed (!@#,*%$?.......)" />
+                                </DataTrigger>
+
+                                <DataTrigger Binding="{Binding INVALID_REC}" Value="9">
+                                    <Setter Property="Background" Value="HotPink" />
+                                    <Setter Property="ToolTip" Value="Invalid Mobile numbers" />
+                                </DataTrigger>
+                                    <DataTrigger Binding="{Binding Dupplicate}" Value="1" >
+                                        <Setter Property="Background" Value="Yellow" />
+                                        <Setter Property ="ToolTip" Value="Record is already exist (Both Mobile Number And Student Name)"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                        </Style>
+                    </DataGridTemplateColumn.CellStyle>
+                </DataGridTemplateColumn >
+            </DataGrid.Columns>
+        </DataGrid>
+        </GroupBox>
+    </Grid>
+</UserControl>
+

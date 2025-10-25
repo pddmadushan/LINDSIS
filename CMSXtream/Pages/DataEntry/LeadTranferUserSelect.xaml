@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="CMSXtream.Pages.DataEntry.LeadTranferUserSelect"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" >
+    <UserControl.Resources >
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/StyleResource/DataGridStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/StyleResource/IconLibrary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid  >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Content="To User"  Height="20" Grid.Column="0" Grid.Row="1" Margin="10,15,0,15" FontWeight="Bold"/>
+        <ComboBox x:Name="cmbLeadTrnsUser" Height="30" Grid.Row="1" Grid.Column="1"/>
+        <Button x:Name="btnTransferLeads" Content="Transfer"   Grid.Row="2" Grid.Column="1" Background="AliceBlue" Click="btnTransferLeads_Click"  />
+        <GroupBox  Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4"  HorizontalAlignment="Left" Margin="10,0,0,0" Height="auto" VerticalAlignment="Top">
+            <GroupBox.Header>
+                <Label Content="Transfer History"></Label>
+            </GroupBox.Header>
+            <DataGrid x:Name="grdHistory" AutoGenerateColumns="False"  CanUserAddRows="False" CanUserDeleteRows="False"  Height="300" RowHeaderWidth="35"
+                      FontSize="12"   LoadingRow="DataGrid_LoadingRow" VirtualizingStackPanel.IsVirtualizing="False"  HorizontalAlignment="Left" MinRowHeight="25">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Width="150,*" Binding="{Binding Path=STD_FULL_NAME}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Date" Width="130" Binding="{Binding Path=CHANGED_DATE}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Event" Width="120" Binding="{Binding Path=ACTION}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Old User" Width="110" Binding="{Binding Path=OLD_USER}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="New User" Width="110" Binding="{Binding Path=NEW_USER}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Edit By" Width="110" Binding="{Binding Path=CHANGED_USER}" IsReadOnly="True"/>
+                </DataGrid.Columns>
+
+            </DataGrid>
+        </GroupBox>
+    </Grid>
+</UserControl>

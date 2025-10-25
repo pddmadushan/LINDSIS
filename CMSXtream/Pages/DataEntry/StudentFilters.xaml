@@ -1,0 +1,262 @@
+﻿<UserControl x:Class="CMSXtream.Pages.DataEntry.StudentFilters"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"   
+             xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+             mc:Ignorable="d">
+
+    <UserControl.Resources >
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/StyleResource/ComboBoxStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/StyleResource/DataGridStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/StyleResource/IconLibrary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <GroupBox x:Name="grpBoxStudent" Grid.Row="0" Grid.Column="0" >
+            <GroupBox.Header>
+                <RadioButton x:Name="chkOptName01"  GroupName="a" >By common search</RadioButton>
+            </GroupBox.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="350" />
+                    <ColumnDefinition Width="40" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28" />
+                </Grid.RowDefinitions>
+
+                <TextBox  Grid.Row="0" Grid.Column="2" Name="txtSearchText" Height="25" Margin="5,2,0,2" MaxLength="250" IsEnabled="{Binding ElementName=chkOptName01, Path=IsChecked}" />
+                <ComboBox Grid.Row="0" Grid.Column="2"  Name="cmbClassGroup" Style="{DynamicResource ComboBoxFlatStyle}"  Height="22" IsEnabled="{Binding ElementName=chkOptName01, Path=IsChecked}" />
+                <ComboBox Grid.Row="0" Grid.Column="1"  Name="cmbSearchType" Style="{DynamicResource ComboBoxFlatStyle}" SelectionChanged="cmbSearchType_SelectionChanged" Height="22" IsEnabled="{Binding ElementName=chkOptName01, Path=IsChecked}" />
+                <mui:ModernButton Grid.Row="0" Grid.Column="3" x:Name="btnAddList" IconData="{Binding Data, Source={StaticResource ImgSearch}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Add to List" Click="btnAddList_Click"  Margin="5,0,0,0" IsEnabled="{Binding ElementName=chkOptName01, Path=IsChecked}" />
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="grpBoxStudent2" Grid.Row="2" Grid.Column="0" >
+            <GroupBox.Header>
+                <RadioButton x:Name="chkOptName02" GroupName="a" >By start date</RadioButton>
+            </GroupBox.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="40" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28" />
+                </Grid.RowDefinitions>
+
+                <mui:ModernButton Grid.Row="0" Grid.Column="3" x:Name="btnAddList2" IconData="{Binding Data, Source={StaticResource ImgSearch}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Add to List"  Margin="5,0,0,0" IsEnabled="{Binding ElementName=chkOptName02, Path=IsChecked}" Click="btnAddList2_Click" />
+                <DatePicker x:Name="FromDate" HorizontalAlignment="Left" Margin="91.2,0,0,0" VerticalAlignment="Top"   SelectedDate="{x:Static sys:DateTime.Now}" IsEnabled="{Binding ElementName=chkOptName02, Path=IsChecked}" Grid.Column="1" Height="25" >
+                    <DatePicker.Resources>
+                        <Style TargetType="DatePickerTextBox">
+                            <Setter Property="IsReadOnly" Value="True"/>
+                        </Style>
+                    </DatePicker.Resources>
+                </DatePicker>
+                <DatePicker x:Name="ToDate" Grid.Column="2" Height="25" HorizontalAlignment="Left" Margin="78,0,0,0" VerticalAlignment="Top"   SelectedDate="{x:Static sys:DateTime.Now}" IsEnabled="{Binding ElementName=chkOptName02, Path=IsChecked}" >
+                    <DatePicker.Resources>
+                        <Style TargetType="DatePickerTextBox">
+                            <Setter Property="IsReadOnly" Value="True"/>
+                        </Style>
+                    </DatePicker.Resources>
+                </DatePicker>
+                <Label Content="Join From" HorizontalAlignment="Left" Margin="29,5,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.75,-0.062" Grid.ColumnSpan="2" Width="58"/>
+                <Label Content="Join To" Grid.Column="2" HorizontalAlignment="Left" Margin="24,5,0,0" VerticalAlignment="Top" Width="54"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="grpBoxStudent3" Grid.Row="4" Grid.Column="0" >
+            <GroupBox.Header>
+                <RadioButton x:Name="chkOptName03" GroupName="a" >By absent week</RadioButton>
+            </GroupBox.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="70" />
+                    <ColumnDefinition Width="40" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28" />
+                </Grid.RowDefinitions>
+                <ComboBox Height="25" x:Name="cmbClsCatogory" Grid.Row="0" Grid.Column="1" Margin="0,4,0,0" Style="{DynamicResource ComboBoxFlatStyle}"  ItemsSource="{Binding Path=ClassGroups}" DisplayMemberPath="CLS_NAME" SelectedValuePath="CLS_ID" IsEnabled="{Binding ElementName=chkOptName03, Path=IsChecked}"/>
+                <TextBox Name="txtWeekNumber" Grid.Column="2" MaxLines="1" MaxLength="3" HorizontalAlignment="Left" Width="83" Margin="107,4,0,0" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding ElementName=chkOptName03, Path=IsChecked}" />
+                <mui:ModernButton Grid.Row="0" Grid.Column="4" x:Name="btnAddList3" IconData="{Binding Data, Source={StaticResource ImgSearch}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Add to List"  Margin="5,0,0,0" IsEnabled="{Binding ElementName=chkOptName03, Path=IsChecked}" Click="btnAddList3_Click" />
+                <Label Content="Week Number" Grid.Column="2" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" />
+                <CheckBox  x:Name="chkActive" Grid.Column="3" Margin="10,10,0,0" Content="Active" IsEnabled="{Binding ElementName=chkOptName03, Path=IsChecked}" />
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="grpBoxStudent4" Grid.Row="6" Grid.Column="0" >
+            <GroupBox.Header>
+                <RadioButton x:Name="chkOptName04" GroupName="a" >By attendance</RadioButton>
+            </GroupBox.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="300" />
+                    <ColumnDefinition Width="40" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28" />
+                    <RowDefinition Height="28" />
+                </Grid.RowDefinitions>
+                <DatePicker Name="dtpClassDate" Grid.Row="0" Grid.Column="0"  Margin="0,4,0,0"  IsEnabled="{Binding ElementName=chkOptName04, Path=IsChecked}" SelectedDateChanged="dtpClassDate_SelectedDateChanged" Height="25"/>
+                <ComboBox x:Name="cmbClsFromAttendance" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Style="{DynamicResource ComboBoxFlatStyle}"  Margin="0,4,0,0" ItemsSource="{Binding Path=ClassGroups}" DisplayMemberPath="CLS_NAME" SelectedValuePath="CLS_ID" IsEnabled="{Binding ElementName=chkOptName04, Path=IsChecked}"/>
+                <ComboBox x:Name="cmbStatus" Grid.Row="0" Grid.Column="1"  Margin="4,4,0,0" Style="{DynamicResource ComboBoxFlatStyle}"  ItemsSource="{Binding Path=ClassGroups}" DisplayMemberPath="CLS_NAME" SelectedValuePath="CLS_ID" IsEnabled="{Binding ElementName=chkOptName04, Path=IsChecked}"/>
+                <mui:ModernButton Grid.Row="1" Grid.Column="2" x:Name="btnAddList4" IconData="{Binding Data, Source={StaticResource ImgSearch}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Add to List"  Margin="5,0,0,0" IsEnabled="{Binding ElementName=chkOptName04, Path=IsChecked}" Click="btnAddList4_Click" />
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="grpBoxStudent5" Grid.Row="8" Grid.Column="0" >
+            <GroupBox.Header>
+                <RadioButton x:Name="chkOptName05" GroupName="a" >By reason</RadioButton>
+            </GroupBox.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="146" />
+                    <ColumnDefinition Width="7"/>
+                    <ColumnDefinition Width="141" />
+                    <ColumnDefinition Width="106" />
+                    <ColumnDefinition Width="40" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28" />
+                </Grid.RowDefinitions>
+                <ComboBox x:Name="cmbInactiveReason" Grid.Row="0" Grid.Column="1" Margin="0,4,0,0" Style="{DynamicResource ComboBoxFlatStyle}"  IsEnabled="{Binding ElementName=chkOptName05, Path=IsChecked}"/>
+
+                <RadioButton  x:Name="chkInactive" Grid.Row="0" Grid.Column="2" Margin="10,4,1,0" GroupName="chk" Content="Temporarily Inactive"  IsEnabled="{Binding ElementName=chkOptName05, Path=IsChecked}" IsChecked="True"/>
+                <RadioButton  x:Name="chkInactivePernt" Grid.Row="0" Grid.Column="4" Margin="0,4,0,0"  GroupName="chk"  Content="Permanently Inactive"  IsEnabled="{Binding ElementName=chkOptName05, Path=IsChecked}" />
+                <RadioButton  x:Name="chkAllInactive" Grid.Row="0" Grid.Column="5" Margin="10,4,0,0"   GroupName="chk" Content="Any Inactive"  IsEnabled="{Binding ElementName=chkOptName05, Path=IsChecked}" />
+                <mui:ModernButton Grid.Row="0" Grid.Column="6" x:Name="btnAddList5" IconData="{Binding Data, Source={StaticResource ImgSearch}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Add to List"  Margin="5,0,0,0" IsEnabled="{Binding ElementName=chkOptName05, Path=IsChecked}" Click="btnAddList5_Click" />
+
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="grpBoxStudent6" Grid.Row="10" Grid.Column="0" >
+            <GroupBox.Header>
+                <RadioButton x:Name="chkOptName06" GroupName="a" >By Intake</RadioButton>
+            </GroupBox.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="40" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28" />
+                </Grid.RowDefinitions>
+                <ComboBox Grid.Row="0" Grid.Column="2"  Name="cmbSubClass" Style="{DynamicResource ComboBoxFlatStyle}"  Height="25" IsEnabled="{Binding ElementName=chkOptName06, Path=IsChecked}" />
+                <ComboBox Grid.Row="0" Grid.Column="1"  Name="cmbIntake" Style="{DynamicResource ComboBoxFlatStyle}"  Height="25" IsEnabled="{Binding ElementName=chkOptName06, Path=IsChecked}" SelectionChanged="cmbIntake_SelectionChanged" />
+                <mui:ModernButton Grid.Row="0" Grid.Column="3" x:Name="btnAddList6" IconData="{Binding Data, Source={StaticResource ImgSearch}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Add to List" Click="btnAddList6_Click"  Margin="5,0,0,0" IsEnabled="{Binding ElementName=chkOptName06, Path=IsChecked}" />
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="grpBoxStudent7" Grid.Row="12" Grid.Column="0" >
+            <GroupBox.Header>
+                <RadioButton x:Name="chkOptName07" GroupName="a" >By present selected day and absent after</RadioButton>
+            </GroupBox.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition Width="32.8"/>
+                    <ColumnDefinition Width="368"/>
+                    <ColumnDefinition Width="40" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28" />
+                </Grid.RowDefinitions>
+                <DatePicker Name="dtpClassDateAbsant" Grid.Row="0" Grid.Column="0"  Margin="0,4,0.4,0.4" Height="25" IsEnabled="{Binding ElementName=chkOptName07, Path=IsChecked}" SelectedDateChanged="dtpClassDateAbsant_SelectedDateChanged" />
+                <ComboBox x:Name="cmbClassAbsant" Grid.Row="0" Grid.Column="2" Margin="0,4,0.8,0.4" Height="25" Style="{DynamicResource ComboBoxFlatStyle}"  IsEnabled="{Binding ElementName=chkOptName07, Path=IsChecked}" Grid.ColumnSpan="2"/>
+                <mui:ModernButton Grid.Row="0" Grid.Column="4" x:Name="btnAddList7" IconData="{Binding Data, Source={StaticResource ImgSearch}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Add to List"  Margin="5.2,0,0.6,0.4" IsEnabled="{Binding ElementName=chkOptName07, Path=IsChecked}" Click="btnAddList7_Click" />
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="grpBoxStudent8" Grid.Row="14" Grid.Column="0" >
+            <GroupBox.Header>
+                <RadioButton x:Name="chkOptName08" GroupName="a" >By never attended</RadioButton>
+            </GroupBox.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="40" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28" />
+                </Grid.RowDefinitions>
+                <mui:ModernButton Grid.Row="0" Grid.Column="2" x:Name="btnAddList8" IconData="{Binding Data, Source={StaticResource ImgSearch}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Add to List"  Margin="5,0,0,0" IsEnabled="{Binding ElementName=chkOptName08, Path=IsChecked}" Click="btnAddList8_Click" />
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="grpBoxStudent09" Grid.Row="16" Grid.Column="0" >
+            <GroupBox.Header>
+                <RadioButton x:Name="chkOptName09"  GroupName="a" >By pending delivery</RadioButton>
+            </GroupBox.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="250" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="40" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28" />
+                </Grid.RowDefinitions>
+
+                <ComboBox Grid.Row="0" Grid.Column="0"  Name="cmbClassGroup1" Style="{DynamicResource ComboBoxFlatStyle}"  Height="25" IsEnabled="{Binding ElementName=chkOptName09, Path=IsChecked}" />
+                <ComboBox Grid.Row="0" Grid.Column="2"  Name="cmbSearchAccesory" Style="{DynamicResource ComboBoxFlatStyle}" Height="25" IsEnabled="{Binding ElementName=chkOptName09, Path=IsChecked}" />
+                <TextBox Name="txtPayamount" Grid.Column="4" MaxLines="1" MaxLength="7" HorizontalAlignment="Left" Width="83" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding ElementName=chkOptName09, Path=IsChecked}" ToolTip="Minimum payment for parcel" />
+                <mui:ModernButton Grid.Row="0" Grid.Column="5" x:Name="btnAddList09" IconData="{Binding Data, Source={StaticResource ImgSearch}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Add to List" Margin="5,0,0,0" IsEnabled="{Binding ElementName=chkOptName09, Path=IsChecked}" Click="btnAddList09_Click" />
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="grpBoxStudent10" Grid.Row="18" Grid.Column="0" >
+            <GroupBox.Header>
+                <RadioButton x:Name="chkOptName10" GroupName="a" >Pending payments for course fee</RadioButton>
+            </GroupBox.Header>
+            <Grid Margin="525,0,97,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="40" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="28" />
+                </Grid.RowDefinitions>
+                <Label Content="Total payment less than" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-500,5,0,0" Width="140" Height="18" />
+                <TextBox Name="txtMinPayamount" MaxLines="1" MaxLength="7" HorizontalAlignment="Left" Width="95" PreviewTextInput="NumberValidationTextBox" IsEnabled="{Binding ElementName=chkOptName10, Path=IsChecked}" ToolTip="Total payment less than" Margin="-355,0,0,0" />
+                <mui:ModernButton Grid.Row="0" Grid.Column="1" x:Name="btnAddList10" IconData="{Binding Data, Source={StaticResource ImgSearch}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Add to List"  Margin="-237,0,237,0" IsEnabled="{Binding ElementName=chkOptName10, Path=IsChecked}" Click="btnAddList10_Click"   />
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>

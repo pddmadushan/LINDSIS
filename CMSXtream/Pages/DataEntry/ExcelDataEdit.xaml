@@ -1,0 +1,28 @@
+﻿<UserControl x:Class="CMSXtream.Pages.DataEntry.ExcelDataEdit"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:CMSXtream.Pages.DataEntry"
+             mc:Ignorable="d" Height="325" Width="516">
+ 
+
+
+
+
+
+
+    <Grid Height="325" VerticalAlignment="Center">
+        <Label Content="Full Name" HorizontalAlignment="Left" Height="27" Margin="45,52,0,0" VerticalAlignment="Top" Width="107" FontSize="14"/>
+        <Label Content="First Name" HorizontalAlignment="Left" Height="22" Margin="45,95,0,0" VerticalAlignment="Top" Width="107" FontSize="14"/>
+        <Label Content="Last Name" HorizontalAlignment="Left" Height="31" Margin="45,132,0,0" VerticalAlignment="Top" Width="107" FontSize="14"/>
+        <Label Content="Mobile " HorizontalAlignment="Left" Height="34" Margin="45,185,0,0" VerticalAlignment="Top" Width="81" FontSize="14"/>
+        <TextBox x:Name="Fullname" HorizontalAlignment="Left" Height="22" Margin="174,52,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="318" MaxLength="200"  />
+        <TextBox x:Name="FirstName" HorizontalAlignment="Left" Height="22" Margin="174,95,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="318" MaxLength="200"/>
+        <TextBox x:Name="LastName" HorizontalAlignment="Left" Height="24" Margin="174,139,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="318" MaxLength="200"/>
+        <TextBox x:Name="Mobile" HorizontalAlignment="Left" Height="34" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="318" MaxLength="10" Margin="174,185,0,0" />
+        <Button x:Name="Save" Content="Save" HorizontalAlignment="Left" Margin="183,266,0,0" Width="69" Click="ButtonSave_Click" Height="38" VerticalAlignment="Top"/>
+        <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Height="38" Margin="286,266,0,0" VerticalAlignment="Top" Width="68" Click="Cancel_ButtonClick"/>
+
+    </Grid>
+</UserControl>

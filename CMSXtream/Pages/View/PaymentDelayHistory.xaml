@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="CMSXtream.Pages.View.PaymentDelayHistory"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" >
+    <UserControl.Resources >
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/StyleResource/DataGridStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <DataGrid Name="grdAttHistory" AutoGenerateColumns="False"  CanUserAddRows="False" RowHeaderWidth="0" EnableRowVirtualization = "True"  CanUserDeleteRows="False"  >
+            <DataGrid.Columns  >
+                <DataGridTextColumn Header="Calc Date" Binding="{Binding Path=CLS_REC_DATE, StringFormat={}{0:dd/MM/yyyy}}" IsReadOnly="True" Width="100" />
+                <DataGridTextColumn Header="Class Name" Binding="{Binding Path=CLS_NAME}" IsReadOnly="True" Width="200" />
+                <DataGridTextColumn Header="Calss Fee" Binding="{Binding Path=CLASS_FEE}" IsReadOnly="True" Width="80" />
+                <DataGridTextColumn Header="Paid Amt" Binding="{Binding Path=PAID_AMOUNT}" IsReadOnly="True" Width="80" />
+                <DataGridTextColumn Header="Delay fee" Binding="{Binding Path=TOTAL_DELAY_AMOUNT}" IsReadOnly="True" Width="70" />
+                <DataGridTextColumn Header="Payble Amt" Binding="{Binding Path=TOTAL_PAYBLE_AMOUNT}" IsReadOnly="True" Width="80" />   
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,225 @@
+﻿<UserControl  x:Class="CMSXtream.Pages.DataEntry.MyLeads"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:local="clr-namespace:CMSXtream.Handlers"            
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+ 
+    <UserControl.Resources >
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/StyleResource/DataGridStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/StyleResource/IconLibrary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <local:IntValueToVisibilityConverter x:Key="IntValueToVisibilityConverter"/>
+            <local:IntValueToVisibilityConverterZeroValue x:Key="IntValueToVisibilityConverterZeroValue"/>
+            <local:EditCommentToReadOnlyConverter x:Key="EditCommentToReadOnlyConverter"/>
+            <local:PendingDaysVisibleConverter x:Key="PendingDayZeroTextVisible"/>
+            <local:PendingDaysColorVisibleConverter x:Key="PendingDaysGreaterThan3"/>
+            <local:DatepickerIsenable x:Key="DatepickerIsenable"/>
+            <local:HideNullUserConverer x:Key="HideNullUserConverer"/>
+            <local:IntToVisibilityConverter x:Key="IntToVisibilityConverter" /> 
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>   
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="127*"/>
+            <ColumnDefinition Width="73*"/>
+        </Grid.ColumnDefinitions>
+        <GroupBox Margin="5,5,5,5" Grid.ColumnSpan="2">
+            <GroupBox.Header>
+                <Grid Height="35">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="106"/>
+                        <ColumnDefinition Width="11"/>
+                        <ColumnDefinition Width="143"/>
+                        <ColumnDefinition Width="11"/>
+                        <ColumnDefinition Width="143"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                    <mui:ModernButton x:Name="btnRefresh"  Grid.Column="0" IconData="{Binding Data, Source={StaticResource ImgRefresh}}"  EllipseDiameter="20" EllipseStrokeThickness="1" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center" Width="22" Click="btnRefresh_Click" />
+                    <Label FontSize="15" Grid.Column="0" Content="Search" Margin="39,0,0,0"/>
+                    <TextBox x:Name="txtSearch" Grid.Column="2" Height="30" VerticalAlignment="Bottom" TextChanged="txtSearch_TextChanged"/>                    
+                    <Label FontSize="15" Grid.Column="4" Content="Labled Count :" Grid.ColumnSpan="2"/>
+                    <Label x:Name="lblLabledStdCount" FontSize="15" Grid.Column="6" Content="" Grid.ColumnSpan="1" />
+                    <mui:ModernButton x:Name="btnAddLead" Grid.Row="0" Grid.Column="8"  IconData="{Binding Data, Source={StaticResource ImgAddStudents}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Add leads" Click="btnAddLead_Click"  />
+                    <Button x:Name="ExportCsv" Content="Export" Grid.Row="0" Grid.Column="8"   ToolTip="Exoprt Mobile Numbers to CSV File" Click="ExportCsv_Click" Margin="50,0,0,0"  />
+                    <Border Grid.Row="0" Grid.Column="9"  BorderThickness="1" CornerRadius="5,0,5,0" BorderBrush="Black" Height="20" Background="#FF04B835" RenderTransformOrigin="0.4,-0.35" Margin="5,0,171,8" />
+                    <Label  Grid.Row="0" Grid.Column="9" Content="1" Margin="12,2,171,5" />
+                    <Border Grid.Row="0" Grid.Column="9"  BorderThickness="1" CornerRadius="5,0,5,0" BorderBrush="Black" Height="20" Background="Yellow" RenderTransformOrigin="0.4,-0.35" Margin="34,0,144,8" />
+                    <Label  Grid.Row="0" Grid.Column="9" Content="2" Margin="42,2,137,5" />
+                    <Border Grid.Row="0" Grid.Column="9"  BorderThickness="1" CornerRadius="5,0,5,0" BorderBrush="Black" Height="20" Background="Orange" RenderTransformOrigin="0.4,-0.35" Margin="61,0,116,8" />
+                    <Label  Grid.Row="0" Grid.Column="9" Content="3" Margin="68,2,100,5" />
+                    <Border Grid.Row="0" Grid.Column="9"  BorderThickness="1" CornerRadius="5,0,5,0" BorderBrush="Black" Height="20" Background="Red" RenderTransformOrigin="0.4,-0.35" Margin="89,0,54,8" />
+                    <Label  Grid.Row="0" Grid.Column="9" Content="more" Margin="105,2,65,5" />
+                </Grid>
+            </GroupBox.Header>
+            <DataGrid x:Name="grdMyCmpStd" VerticalAlignment="top"   AutoGenerateColumns="False"  CanUserAddRows="False" RowHeaderWidth="35"  CanUserDeleteRows="False" MinRowHeight="30" IsReadOnly="True" Background="White" 
+                      LoadingRow="DataGrid_LoadingRow"  VirtualizingStackPanel.IsVirtualizing="False" ClipboardCopyMode="ExcludeHeader" SelectionUnit="FullRow" PreviewMouseDoubleClick="grdMyCmpStd_PreviewMouseDoubleClick"  >
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#ccd5d5"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                                <Setter Property="BorderBrush" Value="#ccd5d5"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns> 
+                    <DataGridTextColumn Width="75" Header="ID" Binding="{Binding CMP_STD_ID}" Visibility="Hidden" />
+                    <DataGridTextColumn Width="10" Binding="{Binding PENDING_DAYS}">
+                        <DataGridTextColumn.CellStyle >
+                            <Style TargetType="{x:Type DataGridCell}" >
+                                <Style.Triggers >
+                                    <DataTrigger Binding="{Binding PENDING_DAYS}" Value="0" >
+                                        <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding PENDING_DAYS}" Value="1">
+                                        <Setter Property="Background" Value="#FF04B835" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding PENDING_DAYS}" Value="2">
+                                        <Setter Property="Background" Value="Yellow" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding PENDING_DAYS}" Value="3">
+                                        <Setter Property="Background" Value="Orange" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding PENDING_DAYS, Converter={StaticResource PendingDaysGreaterThan3}}" Value="True">
+                                        <Setter Property="Background" Value="Red" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="50" Header="User" Binding="{Binding CLS_USER_ID}" FontSize="9" >
+                    </DataGridTextColumn>
+                    <!--<DataGridTextColumn x:Name="dataGridTextColumn" Width="150" Header="Name" Binding="{Binding STD_FULL_NAME}"/>-->
+                    <!--<DataGridTextColumn Width="70" Header="No" Binding="{Binding MOBILE_NO_DUP_SEQ}" FontSize="9"/>-->
+                    <DataGridTemplateColumn x:Name="clmHistory" Width="120" Header="Name">
+                        <DataGridTemplateColumn.CellTemplate >
+                            <DataTemplate >
+                                <StackPanel Orientation="Vertical" >
+                                    <!--<TextBlock x:Name="textBlock1" Text="{Binding MOBILE_NO_DUP_SEQ }"  />-->
+                                    <TextBlock x:Name="textBlock1" Text="{Binding STD_FULL_NAME }"  TextWrapping="Wrap" />
+                                    <mui:ModernButton x:Name="btnHistory" IconData="{Binding Data, Source={StaticResource ImgHistory}}" EllipseDiameter="24" EllipseStrokeThickness="1" ToolTip="Show history" IsManipulationEnabled="True" Click="btnHistory_Click" 
+                                                      Visibility="{Binding MOBILE_NO_DUP_SEQ, Converter={StaticResource IntToVisibilityConverter}}" Margin="0,10,90,0" />
+                                </StackPanel>
+                             </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Width="90" Header="Mobile" Binding="{Binding STD_TELEPHONE , StringFormat=(###) ###-####}" >
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="ToolTip" Value="Double Click to Copy Mobile No"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn x:Name="userInfo" Header="Info " Width="180"  >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock x:Name="textBlock1" Text="{Binding bandscore }"  />
+                                    <TextBlock x:Name="textBlock2"  Text="{Binding exam_type}" />
+                                    <TextBlock x:Name="textBlock3"  Text="{Binding when_do_you_want}"  />
+                                    <TextBlock x:Name="textBlock4"  Text="{Binding your_english_knowledge}"  />
+                                    <TextBlock x:Name="textBlock5"  Text="{Binding your_ielts_knowledge}"  />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn  Width="40" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border x:Name="CellBorder" Padding="5" >
+                                    <StackPanel Orientation="Horizontal">
+                                        <mui:ModernButton x:Name="btnAddLable" IconData="{Binding Data, Source={StaticResource ImgAddTute}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Edit Record"  Click="btnAddLable_Click" />                                       
+                                    </StackPanel>
+                                </Border>
+                                <DataTemplate.Triggers >
+                                    <DataTrigger Binding="{Binding PRORITY_VALUE}" Value="0" >
+                                        <Setter TargetName="CellBorder" Property="Background" Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding PRORITY_VALUE}" Value="1">
+                                        <Setter TargetName="CellBorder" Property="Background" Value="#e81a86" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding PRORITY_VALUE}" Value="2">
+                                        <Setter TargetName="CellBorder" Property="Background" Value="#24a799" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding PRORITY_VALUE}" Value="3">
+                                        <Setter TargetName="CellBorder" Property="Background" Value="#f4b907" />
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Width="500" Binding="{Binding USER_COMMENT}" Header="Comment" Visibility="Visible">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextWrapping" Value="Wrap"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Width="*" Binding="{Binding CMP_STD_LBL}" Header="Lables" Visibility="Visible" >
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="ToolTip" Value="{Binding CMP_STD_LBL}" />
+                                <Setter Property="TextWrapping" Value="Wrap"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="lstAttDate" Header="LstAtd" Width="80" Binding="{Binding RECORD_LAST_MOD_DATE}"/>
+                    <DataGridTextColumn Width="105" Binding="{Binding TOBE_INFO}" >
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Arranged To&#x0a;(Calendar Date)" HorizontalAlignment="Left"/>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTemplateColumn x:Name="clmTransferLead" Width="35" >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical">
+                                    <!---Add student button 1-->
+                                    <mui:ModernButton x:Name="btnAddStudent" IconData="{Binding Data, Source={StaticResource ImgAttendance}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Change Lead as Student" Click="btnAddStudent_Click" Visibility="{Binding ISNOT_CLS_STD, Converter={StaticResource IntValueToVisibilityConverter}}" />
+                                    <!---Edit student button-->
+                                    <mui:ModernButton x:Name="btnEdit" IconData="{Binding Data, Source={StaticResource ImgEdit}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Edit Record" Click="btnEdit_Click" Visibility="{Binding IS_CLS_STD, Converter={StaticResource IntValueToVisibilityConverter}}"/>
+                                    <mui:ModernButton x:Name="btnDeleteStudent" IconData="{Binding Data, Source={StaticResource ImgDelete}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Delet selected student"  Click="btnDeleteStudent_Click" Visibility="{Binding IS_DELETED, Converter={StaticResource IntValueToVisibilityConverterZeroValue}}"/>
+                                    <mui:ModernButton x:Name="btnTranferLead" IconData="{Binding Data, Source={StaticResource ImgTransfers}}"  EllipseDiameter="24" EllipseStrokeThickness="1" ToolTip="Tranfer leads to another user" Click="btnTranferLead_Click" Visibility="{Binding CLS_USER_ID, Converter={StaticResource HideNullUserConverer}}"  />
+                                    <mui:ModernButton x:Name="btnRestoreStudent" HorizontalAlignment="Left"  IconData="{Binding Data, Source={StaticResource ImgRefresh}}"  EllipseDiameter="20" EllipseStrokeThickness="0" ToolTip="Restore delted student"  VerticalAlignment="Center" Visibility="{Binding IS_DELETED, Converter={StaticResource IntValueToVisibilityConverter}}" Click="btnRestoreStudent_Click" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellStyle>
+                            <Style TargetType="{x:Type DataGridCell}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding INCOMPLETED_STD_DATA}" Value="0">
+                                        <Setter Property="Background" Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding INCOMPLETED_STD_DATA}" Value="1">
+                                        <Setter Property="Background" Value="Red" />
+                                        <Setter Property="ToolTip" Value="Incomplete Student Data (Gender,Class......)" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ISNOT_CLS_STD}" Value="1">
+                                        <Setter Property="Background" Value="WHITE" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTemplateColumn.CellStyle>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+    </Grid>
+</UserControl>

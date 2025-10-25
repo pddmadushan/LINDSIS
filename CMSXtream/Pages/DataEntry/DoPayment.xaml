@@ -1,0 +1,81 @@
+﻿<UserControl x:Class="CMSXtream.Pages.DataEntry.DoPayment"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI" 
+             xmlns:local="clr-namespace:CMSXtream.Control" 
+             mc:Ignorable="d" Width="500" Height="350" >
+    <UserControl.Resources >
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/StyleResource/ComboBoxStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/StyleResource/DataGridStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/StyleResource/IconLibrary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="250" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        <Label Name="lblClass" Grid.Row="0" Grid.Column="0" />
+        <ComboBox x:Name="cmbClsGroup" Grid.Row="0" Grid.Column="0" Style="{DynamicResource ComboBoxFlatStyle}" TabIndex="0" SelectionChanged="cmbClsGroup_SelectionChanged" Margin="0,0,5,0"  />
+        <Label Name="lblYearMonth" Grid.Row="0" Grid.Column="1" />
+        <DatePicker Name="dtpPayMonth" Grid.Row="0" Grid.Column="1" Margin="0,0,131,0" local:DatePickerCalendar.IsMonthYear="True" local:DatePickerDateFormat.DateFormat="MMM-yyyy" Text="MMM-yyyy" />
+        <Label Grid.Row="1" Grid.Column="0" Content="Class Fee" />
+        <TextBox Grid.Row="1" Grid.Column="1" Name="txtAmount" IsEnabled="False" Margin="0,5,140,0" TextAlignment="Right" PreviewTextInput="NumberValidationTextBox"  MaxLength="8"  />
+        <CheckBox Grid.Row="2" Grid.Column="1"  Name="chkCardIssue" Content="Card Issued" Checked="chkCardIssue_Checked" Unchecked="chkCardIssue_Unchecked" />
+        <GroupBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Header="Payment Area" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="75" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="120" />
+                    <ColumnDefinition Width="120" />
+                    <ColumnDefinition Width="50" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                </Grid.RowDefinitions>
+                <Label Grid.Row="1" Grid.Column="0" Content="Paid Date" />
+                <DatePicker Name="dtpDatePicke" Grid.Column="1" SelectedDateChanged="dtpDatePicke_SelectedDateChanged" Grid.ColumnSpan="2" Margin="0,0,107,0" MouseDoubleClick="dtpDatePicke_MouseDoubleClick"/>
+                <CheckBox Name="rdoBtn" Grid.Column="2" Content="Full Payment" HorizontalAlignment="Right" Width="91" Checked="RadioButton_Checked" Unchecked="RadioButton_Unchecked" />
+                <TextBox Grid.Column="3" Name="txtPayment" PreviewTextInput="NumberValidationTextBox" TextAlignment="Right" Margin="10,0,0,0"  MaxLength="6" />
+                <mui:ModernButton x:Name="btnDoPayment" Grid.Column="4"  IconData="{Binding Data, Source={StaticResource ImgPayment}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Make Payment" Click="btnDoPayment_Click" Margin="28,0,-28,0" />
+            </Grid>
+        </GroupBox>
+        <DataGrid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Name="grdPayHistory" AutoGenerateColumns="False"  CanUserAddRows="False" RowHeaderWidth="0"  CanUserDeleteRows="False" >
+            <DataGrid.Columns  >
+                <DataGridTextColumn Header="Paid Date" Binding="{Binding Path=STD_REC_DATE, StringFormat={}{0:dd/MM/yyyy}}" IsReadOnly="True" Width="300" />
+                <DataGridTextColumn Header="Payment" Binding="{Binding Path=PAID_AMOUNT}" IsReadOnly="True" Width="140"/>
+                <DataGridTemplateColumn Header="" x:Name="clmBtndelete">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <mui:ModernButton x:Name="btnDelete" IconData="{Binding Data, Source={StaticResource ImgDelete}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Delete Payment" Click="btnDelete_Click" Margin="15,0,0,0" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Label Name="lblChange" Content="Change Amount" Grid.Column="1" HorizontalAlignment="Left" Margin="115,5,0,0" Grid.Row="1" VerticalAlignment="Top"   Height="20" Width="100" Foreground="#FF001B95" Cursor="Hand" Background="#FFDCEAEC" MouseDoubleClick="Label_MouseDoubleClick" ToolTip="Double click to change" />
+        <Label Name="lblUpdate" Content="Update Amount" Grid.Column="1" HorizontalAlignment="Left" Margin="115,5,0,0" Grid.Row="1" VerticalAlignment="Top"   Height="20" Width="100" Foreground="#FF001B95" Cursor="Hand" Background="#FFDCEAEC"  Visibility="Hidden" MouseDoubleClick="lblUpdate_MouseDoubleClick" ToolTip="Double click to update"/>
+        <Button x:Name="btnSave"  Grid.Row="5" Grid.Column="1"  ToolTip="Save Record" Padding="0,0" BorderThickness="1"  Margin="198,5,10,-16" Click="btnSave_Click" >
+            <Image Name="imgSave" Source ="pack://application:,,,/Image/ImgBtnSave.png" Width="40" Height="40" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"   >
+            </Image>
+        </Button>
+        <Button x:Name="btnDeleteCalssfree"  Grid.Row="5" Grid.Column="1" ToolTip="Delete Record" Padding="0,0" BorderThickness="1" Margin="130,5,77,-16" Click="btnDeleteCalssfree_Click"  >
+            <Image Name="imgDelete" Source ="pack://application:,,,/Image/ImgBtnDelete.png" Width="40" Height="35" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"   >
+            </Image>
+        </Button>
+    </Grid>
+</UserControl>

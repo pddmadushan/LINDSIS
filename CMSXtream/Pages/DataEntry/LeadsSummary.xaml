@@ -1,0 +1,350 @@
+﻿<UserControl x:Class="CMSXtream.Pages.DataEntry.LeadsSummary"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+             xmlns:mycls="clr-namespace:CMSXtream.Pages.DataEntry"
+             xmlns:local="clr-namespace:CMSXtream.Control"
+             mc:Ignorable="d" >
+    <UserControl.Resources >
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/StyleResource/DataGridStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/StyleResource/IconLibrary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"  />
+            <ColumnDefinition Width="10"  />
+            <ColumnDefinition Width="738"  />
+            <ColumnDefinition Width="9"/>
+            <ColumnDefinition Width="200"  />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="10" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="10"  />
+            <RowDefinition Height="Auto"  />
+        </Grid.RowDefinitions>
+        <GroupBox  Grid.Row="0" Grid.Column="0" Width="auto">
+            <GroupBox.Header>
+                <Label FontSize="10">Date</Label>
+            </GroupBox.Header>
+            <Grid HorizontalAlignment="Left" Width="Auto" Margin="0,2,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60" />
+                    <ColumnDefinition Width="105" />
+                    <ColumnDefinition Width="30" />
+                    <ColumnDefinition Width="105" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                </Grid.RowDefinitions>
+                <DatePicker  x:Name="dtpFromDate" Grid.Row="0" Grid.Column="1"  HorizontalAlignment="Left" Width="103">
+                    <DatePicker.Resources>
+                        <Style TargetType="DatePickerTextBox">
+                            <Setter Property="IsReadOnly" Value="True"/>
+                        </Style>
+                    </DatePicker.Resources>
+                </DatePicker>
+                <Label Grid.Row="0" Grid.Column="2" Content="To" HorizontalAlignment="Left"></Label>
+                <DatePicker  x:Name="dtpToDate" Grid.Row="2" Grid.Column="3" HorizontalAlignment="Left" Width="103" SelectedDate="{x:Static sys:DateTime.Now }">
+                    <DatePicker.Resources>
+                        <Style TargetType="DatePickerTextBox">
+                            <Setter Property="IsReadOnly" Value="True"/>
+                        </Style>
+                    </DatePicker.Resources>
+                </DatePicker>
+            </Grid>
+        </GroupBox>
+        <GroupBox x:Name="grpCommission" Grid.Row="0" Grid.Column="2" Grid.RowSpan="3" VerticalAlignment="Top"  Foreground="#FF3403FD" FontWeight="Bold" Grid.ColumnSpan="2"  >
+            <GroupBox.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF69D2DF" Offset="0.006"/>
+                    <GradientStop Color="#FFB1F3FA" Offset="1"/>
+                </LinearGradientBrush>
+            </GroupBox.Background>
+            <GroupBox.BorderBrush>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black"/>
+                    <GradientStop Color="#FF4F6AF1" Offset="1"/>
+                </LinearGradientBrush>
+            </GroupBox.BorderBrush>
+            <GroupBox.Header>
+                <Grid Height="25" Background="#FF85DFEA">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="145" />
+                        <ColumnDefinition Width="120" />
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="30" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Label FontSize="10" Grid.Column="0" Content="My Commision for month of" Margin="5,5,0,0" Foreground="#FF931590" ></Label>
+                    <DatePicker  x:Name="dtpComEffective"  Grid.Column="1" HorizontalAlignment="Left" Width="103" SelectedDate="{x:Static sys:DateTime.Now }" Background="{x:Null}" 
+                                 local:DatePickerCalendar.IsMonthYear="True" local:DatePickerDateFormat.DateFormat="MMM-yyyy" Text="MMM-yyyy"  FontWeight="Normal" BorderBrush="{x:Null}">
+                        <DatePicker.Resources>
+                            <Style TargetType="DatePickerTextBox">
+                                <Setter Property="IsReadOnly" Value="True"/>
+                            </Style>
+                        </DatePicker.Resources>
+                    </DatePicker>
+                    <mui:ModernButton x:Name="btnComRefresh" Grid.Column="2" IconData="{Binding Data, Source={StaticResource ImgRefresh}}"  EllipseDiameter="20" EllipseStrokeThickness="1" Height="25" Click="btnComRefresh_Click" />
+                    <mui:ModernButton x:Name="btnComBreakDown" Grid.Column="3" IconData="{Binding Data, Source={StaticResource ImgCommition}}"  EllipseDiameter="20" EllipseStrokeThickness="1" Height="25" Click="btnComBreakDown_Click" />
+                </Grid>
+            </GroupBox.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                </Grid.RowDefinitions>
+                <TextBox x:Name="txtCommisionMessage" FontSize="12" Foreground="#FF1D49BA" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" Background="{x:Null}"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox  Grid.Row="1" Grid.Column="0" Height="270" Margin="0,10,0,0" Grid.RowSpan="2" Width="auto">
+            <GroupBox.Header>
+                <Grid Height="25">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition Width="260" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="80" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <Label FontSize="10">Campaigns</Label>
+                    <TextBox x:Name="groupTextSearch" FontSize="10" TextChanged="groupTextSearch_TextChanged" Grid.ColumnSpan="1" Margin="5,0,0,5" Grid.Column="1" Height="20" />
+                    <Label Name="txtGroupCount" FontSize="12" Grid.Column="3" Foreground="#FF0010FF" ></Label>
+                </Grid>
+            </GroupBox.Header>
+            <DataGrid Name="grdCampaign" Grid.Row="0"  AutoGenerateColumns="False"  CanUserAddRows="False" CanUserDeleteRows="False"  Height="auto"
+                      FontSize="12"   LoadingRow="DataGrid_LoadingRow" VirtualizingStackPanel.IsVirtualizing="False" Width="400" HorizontalAlignment="Left" >
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="FontSize" Value="10" />
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="Background" Value="Blue" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns  >
+                    <DataGridTemplateColumn Width="30" Header="CK" SortMemberPath="chkGrpMark.Check.value" >
+                        <DataGridTemplateColumn.CellTemplate   >
+                            <DataTemplate >
+                                <CheckBox Name="chkCmpMarkAll" Checked="chkCmpMarkAll_Checked" Unchecked="chkCmpMarkAll_Unchecked" IsChecked="True"></CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <CheckBox Name="chkCmpMark" Checked="chkCmpMark_Checked" Unchecked="chkCmpMark_Unchecked" IsChecked="True"></CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="ID" Binding="{Binding Path=CMP_ID}" IsReadOnly="True" Width="40"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Path=CMP_DES}" IsReadOnly="True" Width="*" />
+
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        <GroupBox  Grid.Row="3"  FontSize="10" Margin="0,10,0,0" Grid.RowSpan="2" Height="284" Width="auto" >
+            <GroupBox.Header >
+                <Grid Height="25">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50" />
+                        <ColumnDefinition Width="260" />
+                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="80" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition   />
+                    </Grid.RowDefinitions>
+                    <Label FontSize="10">Label</Label>
+                    <TextBox x:Name="lableTextSearch" FontSize="10" TextChanged="lableTextSearch_TextChanged" Grid.ColumnSpan="1" Margin="35,0,-0.2,0.2" Height="20" Grid.Column="1"/>
+                    <Label Name="lblIncount" FontSize="12" Grid.Column="4" Foreground="#FF0010FF" ></Label>
+
+                </Grid>
+            </GroupBox.Header>
+            <DataGrid Name="grdLable" AutoGenerateColumns="False"  CanUserAddRows="False" RowHeaderWidth="20"  CanUserDeleteRows="False" Height = "auto" VerticalAlignment="Top" VirtualizingStackPanel.IsVirtualizing="False" MinRowHeight="20" FontSize="12"  HorizontalAlignment="Left" Width="400" LoadingRow="DataGrid_LoadingRow">
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="FontSize" Value="10" />
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="Background" Value="Blue" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+                <DataGrid.Columns  >
+                    <DataGridTemplateColumn Width="30" Header="CK" >
+                        <DataGridTemplateColumn.CellTemplate   >
+                            <DataTemplate >
+                                <CheckBox Name="chkLblMark" Checked="chkLblMark_Checked" Unchecked="chkLblMark_Unchecked" ></CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <CheckBox Name="chkLblMarkAll" Checked="chkLblMarkAll_Checked" Unchecked="chkLblMarkAll_Unchecked"></CheckBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="No" Binding="{Binding Path=LBL_ID}" IsReadOnly="True" Width="70" Visibility="Hidden" />
+                    <DataGridTextColumn Header="Name" Binding="{Binding Path=LBL_DES}" IsReadOnly="True" Width="*"/>
+                    <DataGridTextColumn Header="Heads" Binding="{Binding Path=STD_COUNT}" IsReadOnly="True" Width="40"  Visibility="Hidden"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
+        <GroupBox x:Name="grpBoxStudent" Grid.Row="1" Grid.Column="2" VerticalAlignment="Top" Grid.ColumnSpan="2" Grid.RowSpan="3" Margin="0,20,0,0"  >
+            <GroupBox.Header>
+                <Label FontSize="10">Leads Overview</Label>
+            </GroupBox.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="66*"/>
+                    <ColumnDefinition Width="19*"/>
+                    <ColumnDefinition Width="85*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="500" />
+                </Grid.RowDefinitions>
+                <mui:ModernButton x:Name="btnSearchStudent" IconData="{Binding Data, Source={StaticResource ImgRefresh}}"  EllipseDiameter="20" EllipseStrokeThickness="1" ToolTip="Search" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left" Width="22" Click="btnSearchStudent_Click"  />
+                <mui:ModernButton x:Name="btnAddLeads" IconData="{Binding Data, Source={StaticResource ImgAddStudent}}"  EllipseDiameter="20" EllipseStrokeThickness="1" ToolTip="Add Leads" Height="25" VerticalAlignment="Center" HorizontalAlignment="Left" Width="22" Click="btnAddLeads_Click" Margin="30,0,0,0" />
+                <Label x:Name="lblLoadTime" Grid.ColumnSpan="3" Margin="60,10,0,0" FontWeight="Bold" Foreground="#FF028F1F" FontSize="12"/>
+                <DataGrid Grid.Row="2" Name="grdLeadList" AutoGenerateColumns="False"  CanUserAddRows="False" CanUserDeleteRows="True" CanUserSortColumns="False" 
+                          RowHeaderWidth="35" RowHeight="50" Height="500" VerticalAlignment="Center" LoadingRow="DataGrid_LoadingRow" Grid.ColumnSpan="3">
+                    <DataGrid.Resources>
+                        <mycls:DoubleToVisaulConverter x:Key="DoubleToVis"/>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" Binding="{Binding Path=USER_ID}" IsReadOnly="True"  Width="200" Visibility="Hidden"/>
+                        <DataGridTextColumn  Header="User" Binding="{Binding Path=CLS_USER_ID}" IsReadOnly="True"  Width="200" />
+                        <DataGridTemplateColumn Header="Pending" Width="90">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Label Content="{Binding Path=PENDING}"  />
+                                        <mui:ModernButton x:Name="btnViewPendin" IconData="{Binding Data, Source={StaticResource ImgLeadPending}}"  EllipseDiameter="25" EllipseStrokeThickness="1"  ToolTip="View Leads" Margin="25,0,0,0" Click="btnViewPendin_Click" Visibility="{Binding Path=VIEW_BTN_FLG,Converter={StaticResource DoubleToVis}}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Attended" Width="90">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Label Content="{Binding Path=ATTENDED}"  />
+                                        <mui:ModernButton x:Name="btnViewAttended" IconData="{Binding Data, Source={StaticResource ImgLeadOpen}}"  EllipseDiameter="25" EllipseStrokeThickness="1"  ToolTip="View Leads" Margin="25,0,0,0" Click="btnViewAttended_Click" Visibility="{Binding Path=VIEW_BTN_FLG,Converter={StaticResource DoubleToVis}}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Deleted" Width="90">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Label Content="{Binding Path=DELETED}"  />
+                                        <mui:ModernButton x:Name="btnViewdeDeleted" IconData="{Binding Data, Source={StaticResource ImgDelete}}"  EllipseDiameter="25" EllipseStrokeThickness="1"  ToolTip="View Leads" Margin="25,0,0,0" Click="btnViewdeDeleted_Click" Visibility="{Binding Path=VIEW_BTN_FLG,Converter={StaticResource DoubleToVis}}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Completed" Width="90">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Label Content="{Binding Path=COMPLETE}"  />
+                                        <mui:ModernButton x:Name="btnViewCompleted" IconData="{Binding Data, Source={StaticResource ImgLeadCompleate}}" EllipseDiameter="25" EllipseStrokeThickness="1"  ToolTip="View Leads" Margin="25,0,0,0" Click="btnViewCompleted_Click" Visibility="{Binding Path=VIEW_BTN_FLG,Converter={StaticResource DoubleToVis}}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Total" Width="90">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Label Content="{Binding Path=TOTAL}"  />
+                                        <mui:ModernButton x:Name="btnShowLead" IconData="{Binding Data, Source={StaticResource ImgLeadTotal}}" EllipseDiameter="25" EllipseStrokeThickness="1"  ToolTip="View Leads" Click="btnShowLead_Click"  Margin="30,0,0,0" Visibility="{Binding Path=VIEW_BTN_FLG,Converter={StaticResource DoubleToVis}}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="5" Grid.Row="1" Width="120" HorizontalAlignment="Left" Margin="10,12,0,0" Height="auto" Grid.RowSpan="4" VerticalAlignment="Top">
+            <GroupBox.Header>
+                <Grid Width="auto">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="27"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <mui:ModernButton x:Name="btnRefreshAtt" IconData="{Binding Data, Source={StaticResource ImgRefresh}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Refresh" HorizontalAlignment="Left" Grid.Column="0" Click="btnRefreshAtt_Click" />
+                    <Label x:Name="lblAttLstRf" FontSize="12" Content="" Grid.Column="1" ToolTip="Last Refresh time"/>
+                </Grid>
+            </GroupBox.Header>
+            <Grid>
+            <DataGrid x:Name="grdGroups" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"  Height="auto" VerticalAlignment="Top" Background="White"
+                      FontSize="12"   VirtualizingStackPanel.IsVirtualizing="False" d:ItemsSource="{d:SampleData}" RowHeaderWidth="0" HeadersVisibility="All" MinRowHeight="50"  Width="120" HorizontalAlignment="Left">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="*" Header="Groups to come" >
+                        <DataGridTemplateColumn.CellTemplate >
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" Background="LightGreen">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="40"/>
+                                            <ColumnDefinition Width="50"/>
+                                        </Grid.ColumnDefinitions>
+                                    <Label x:Name="lblLeadCount" FontWeight="Bold" Content="{Binding STD_COUNT}" HorizontalAlignment="Center" Width="auto" Grid.Column="0"/>
+                                        <mui:ModernButton x:Name="btnClsAttList" IconData="{Binding Data, Source={StaticResource ImgStudents}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="View Class Group Student" HorizontalAlignment="Center" Grid.Column="1" Click="btnClsAttList_Click"/>
+                                    </Grid>
+                                    <Grid HorizontalAlignment="Center">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Label x:Name="lblClsGrp" Content="{Binding CLS_NAME}"  HorizontalAlignment="Left" Width="auto" />
+                                    </Grid>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn x:Name="clsGrp" Binding="{Binding CLS_ID}" Visibility="Hidden" Width="0"/>
+                </DataGrid.Columns>
+            </DataGrid>
+                <TextBlock x:Name="txtblckNoData" Visibility="Collapsed" TextWrapping="Wrap" Foreground="Red" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold">
+                    No Upcoming Classes
+                </TextBlock>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Column="5" Grid.Row="0" Width="120" HorizontalAlignment="Left" Margin="10,0,0,0" Height="auto" VerticalAlignment="Top">
+            <GroupBox.Header>
+                <Grid Width="auto">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="27"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <mui:ModernButton x:Name="btnLaodTransfer" IconData="{Binding Data, Source={StaticResource ImgAttendance}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Load Transfer" HorizontalAlignment="Left" Grid.Column="0" Click="btnLaodTransfer_Click"  />
+                    <Label x:Name="lblTransfe" FontSize="10" FontStyle="Normal" Grid.Column="1" Content="New Transfers" FontWeight="Bold" Foreground="DarkOrchid"/>
+                </Grid>
+            </GroupBox.Header>
+            <Label x:Name="txtTransferCount" FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold">
+            </Label>
+        </GroupBox>
+    </Grid>
+</UserControl>

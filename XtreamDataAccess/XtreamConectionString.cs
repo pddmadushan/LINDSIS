@@ -1,0 +1,16 @@
+﻿
+namespace XtreamDataAccess
+{
+    public class XtreamConectionString
+    {
+        public XtreamConectionString()
+        {
+            _connection = System.Configuration.ConfigurationManager.ConnectionStrings["CMSXtreamConnection"].ToString(); 
+        }
+        private string _connection;
+        public string getConnetctionString
+        {
+            get { return this._connection; }
+        }
+    }
+}

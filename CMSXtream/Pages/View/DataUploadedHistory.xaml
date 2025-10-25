@@ -1,0 +1,70 @@
+﻿<UserControl x:Class="CMSXtream.Pages.View.DataUploadedHistory"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mui="http://firstfloorsoftware.com/ModernUI"
+             xmlns:local="clr-namespace:CMSXtream.Handlers"
+             mc:Ignorable="d" >
+
+    <UserControl.Resources >
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/StyleResource/DataGridStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/StyleResource/IconLibrary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <local:IntValueToVisibilityConverterZeroValue x:Key="IntValueToVisibilityConverterZeroValue"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <!--<ColumnDefinition Width="*"/>-->
+            <ColumnDefinition Width="20"/>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <ComboBox x:Name="cmbCmp" Grid.Column="0" Grid.Row="0"/>
+        <!--<Label Content="Showing Summery for Campaign : " Grid.Column="0" Grid.Row="0" FontWeight="Bold" Width="250" HorizontalAlignment="Left"/>-->
+        <!--<Label x:Name="lblCmpName" Content="Campaign name" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left" Width="auto" />-->
+        <DatePicker x:Name="dtpFrom" Grid.Row="0" Grid.Column="2"/>
+        <Label Content="To" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center" Width="auto" VerticalAlignment="Center" FontWeight="Bold"/>
+        <DatePicker x:Name="dtpTo" Grid.Row="0" Grid.Column="4"/>
+        <mui:ModernButton x:Name="btnSearch" IconData="{Binding Data, Source={StaticResource ImgSearch}}" 
+                  EllipseDiameter="20" EllipseStrokeThickness="1" ToolTip="Search History"  Grid.Column="5" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center"
+                  Click="btnSearch_Click" Margin="5,0,0,0"/>
+        <Label x:Name="lblNorecod" Content="" FontWeight="Bold" Grid.Column="0" HorizontalAlignment="Left" Grid.Row="1" Grid.ColumnSpan="2" Foreground="Red" FontSize="16"/>
+        <DataGrid x:Name="grdUploadedHistory" HorizontalAlignment="Left" Height="auto"  VerticalAlignment="Top" Width="Auto"  AutoGenerateColumns="false" CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="True"
+           Grid.Column="0" Grid.ColumnSpan="6"  Grid.Row="2" VirtualizingStackPanel.IsVirtualizing="False" MinRowHeight="30" LoadingRow="grdManualLead_LoadingRow"  RowHeaderWidth="35">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ADD_ID" Width="40" Binding="{Binding ADD_ID}" Visibility="Hidden"/>
+                <DataGridTextColumn Header="Campaign Name" Width="270" Binding="{Binding CMP_DES}" />
+                <DataGridTextColumn Header="Add Name" Width="*" Binding="{Binding ADD_DES}"/>
+                <DataGridTextColumn Header="Add Date" Width="90" Binding="{Binding ADD_DATE}" />
+                <DataGridTextColumn Header="Uploaded User" Width="120" Binding="{Binding UPLOADDED_USER}"/>
+                <DataGridTextColumn Header="Uploaded Date" Width="150" Binding="{Binding UPLOADED_DATE}"/>
+                <DataGridTextColumn Header="Uploaded" Width="70" Binding="{Binding COUNT_SM}"/>
+                <DataGridTextColumn Header="STD Converted" Width="110" Binding="{Binding CONVERTED}"/>
+                <DataGridTextColumn Header="STD Unconverted" Width="117" Binding="{Binding UNCONVERTED}"/>
+                <DataGridTextColumn Header="Deleted" Width="70" Binding="{Binding DELETED_COUNT}"/>
+                <DataGridTemplateColumn Width="40" >
+                    <DataGridTemplateColumn.CellTemplate  >
+                        <DataTemplate>
+                            <mui:ModernButton x:Name="btnHistoryDelete" IconData="{Binding Data, Source={StaticResource ImgDelete}}" 
+                                              EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Delete Uploaded data"  
+                                              Click="btnHistoryDelete_Click"
+                                               Visibility="{Binding IS_DELETED, Converter={StaticResource IntValueToVisibilityConverterZeroValue}}"/>
+                        </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
