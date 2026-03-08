@@ -1,7 +1,10 @@
-﻿using CMSXtream.Pages.View;
+﻿using CMSXtream.Handlers;
+using CMSXtream.Pages.View;
 using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -29,6 +32,7 @@ namespace CMSXtream.Pages.DataEntry
         public Boolean UserChange = false;
         public static int ProrityValue;
         public string initComment = string.Empty;
+        public Boolean AddFromSearch = false;
 
         public AddLableToCmpStudent(Boolean CallFromTransfer = false)
         {
@@ -310,92 +314,133 @@ namespace CMSXtream.Pages.DataEntry
         {
             try
             {
-                int rowCount = 0;
-                DataTable _selectedLblTbl = new DataTable();
-                _selectedLblTbl.Columns.Add("LBL_ID", typeof(Int32));
-                rowCount = grdLable.Items.Count;
-                //if (rowCount > 0)
-                //{
-                for (int i = 0; i < rowCount; i++)
+                if (SaveValidation())
                 {
-                    var selectedRow = (System.Data.DataRowView)grdLable.Items[i];
-                    int lblId = Int32.Parse(selectedRow["LBL_ID"].ToString());
-                    DataGridCell cell = GetCell(i, 0, grdLable);
-                    CheckBox chk = GetVisualChild<CheckBox>(cell);
-                    if (chk.IsChecked.Value)
+                    int rowCount = 0;
+                    DataTable _selectedLblTbl = new DataTable();
+                    _selectedLblTbl.Columns.Add("LBL_ID", typeof(Int32));
+                    rowCount = grdLable.Items.Count;
+                    //if (rowCount > 0)
+                    //{
+                    for (int i = 0; i < rowCount; i++)
                     {
-                        _selectedLblTbl.Rows.Add(lblId);
+                        var selectedRow = (System.Data.DataRowView)grdLable.Items[i];
+                        int lblId = Int32.Parse(selectedRow["LBL_ID"].ToString());
+                        DataGridCell cell = GetCell(i, 0, grdLable);
+                        CheckBox chk = GetVisualChild<CheckBox>(cell);
+                        if (chk.IsChecked.Value)
+                        {
+                            _selectedLblTbl.Rows.Add(lblId);
+                        }
                     }
-                }
-                try
-                {
-                    ProrityValue = 0;
-
-                    if (chkP3.IsChecked.Value) ProrityValue = 3;
-                    if (chkP2.IsChecked.Value) ProrityValue = 2;
-                    if (chkP1.IsChecked.Value) ProrityValue = 1;
-
-                    if (chkNoMoreAttention.IsChecked == true)
+                    try
                     {
-                        NoMoreAtt = 1;
-                    }
-                    else
+                        ProrityValue = 0;
+
+                        if (chkP3.IsChecked.Value) ProrityValue = 3;
+                        if (chkP2.IsChecked.Value) ProrityValue = 2;
+                        if (chkP1.IsChecked.Value) ProrityValue = 1;
+
+                        if (chkNoMoreAttention.IsChecked == true)
+                        {
+                            NoMoreAtt = 1;
+                        }
+                        else
+                        {
+                            NoMoreAtt = 0;
+                        }
+                        string _loggedUser = StaticProperty.LoginUserID;
+                        DateTime? attDate = dtpAttendantDate.SelectedDate;
+                        int clsId = Int32.Parse(cmbClass.SelectedValue.ToString());
+                        int userId = -1;
+                        if (cmbLeadTrnsUser.SelectedValue != null)
+                        {
+                            userId = Int32.Parse(cmbLeadTrnsUser.SelectedValue.ToString());
+                        }
+                        AddLableToCmpStudentDA _saveLbl = new AddLableToCmpStudentDA();
+                        _saveLbl.SaveLeadsLable(_selectedLblTbl, CmpStdId, _loggedUser, clsId, attDate, NoMoreAtt, ProrityValue, userId);
+
+                        string curentComment = txtUserComment.Text.Trim();
+                        if (curentComment != string.Empty || (curentComment == string.Empty && initComment != string.Empty))
+                        {
+                            MyLeadsDA _saveComment = new MyLeadsDA();
+                            _saveComment.SaveUserComment(CmpStdId, curentComment, _loggedUser, clsId, attDate);
+                            initComment = curentComment;
+                            UserChange = true;
+                        }
+
+                        //reload lable changes
+                        MyLeads.Reload = true;
+
+                        var _selectedLbl = from r1 in tblLoadLbl.AsEnumerable()
+                                           join r2 in _selectedLblTbl.AsEnumerable()
+                                           on Convert.ToInt32(r1["LBL_ID"]) equals Convert.ToInt32(r2["LBL_ID"])
+                                           select r1.Field<string>("LBL_DES");
+
+                        MyLeads.SavedLableList = string.Join(", ", _selectedLbl);
+                        MyLeads.tobeInfoText = "";
+                        if (dtpAttendantDate.SelectedDate != null)
+                        {
+                            MyLeads.tobeInfoText = dtpAttendantDate.SelectedDate.Value.ToString("yyyy-MM-dd");
+                        }
+                        if (clsId != -1)
+                        {
+                            MyLeads.tobeInfoText = MyLeads.tobeInfoText + " " + cmbClass.Text;
+                        }
+
+                        if (userId != -1 && userId != UserId)
+                        {
+                            UserChange = true;
+                        }
+                        //reload lable changes
+
+                        if (chkFstSMS.IsChecked == true)
+                        {
+                            if (clsId == -1)
+                            {
+                                MessageBox.Show("Please select a class for send SMS!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.No);
+                            }
+                            else
+                            {
+                                ((FirstFloor.ModernUI.Windows.Controls.ModernWindow)this.Parent).Close();
+                                btnSendSMS();
+                            }
+                        }
+                        else
+                        {
+                            if (AddFromSearch)
+                            {
+                                MessageBoxResult result = MessageBox.Show("Do you wan to send initial SMS?", "Confirmation"/*box tttle*/, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                                if (result == MessageBoxResult.Yes)
+                                {
+                                    if (clsId == -1)
+                                    {
+                                        MessageBox.Show("Please select a class for send SMS!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.No);
+                                    }
+                                    else
+                                    {
+                                        ((FirstFloor.ModernUI.Windows.Controls.ModernWindow)this.Parent).Close();
+                                        btnSendSMS();
+                                    }
+                                }
+                                else
+                                {
+                                    ((FirstFloor.ModernUI.Windows.Controls.ModernWindow)this.Parent).Close();
+                                }
+                            }
+                            else
+                            {
+                                ((FirstFloor.ModernUI.Windows.Controls.ModernWindow)this.Parent).Close();
+                            }
+                        }
+
+                        }
+                    catch (Exception ex)
                     {
-                        NoMoreAtt = 0;
+                        LogFile logger = new LogFile();
+                        logger.MyLogFile(ex);
+                        MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
                     }
-                    string _loggedUser = StaticProperty.LoginUserID;
-                    DateTime? attDate = dtpAttendantDate.SelectedDate;
-                    int clsId = Int32.Parse(cmbClass.SelectedValue.ToString());
-                    int userId = -1;
-                    if (cmbLeadTrnsUser.SelectedValue != null)
-                    {
-                        userId = Int32.Parse(cmbLeadTrnsUser.SelectedValue.ToString());
-                    }
-                    AddLableToCmpStudentDA _saveLbl = new AddLableToCmpStudentDA();
-                    _saveLbl.SaveLeadsLable(_selectedLblTbl, CmpStdId, _loggedUser, clsId, attDate, NoMoreAtt, ProrityValue, userId);
-
-                    string curentComment = txtUserComment.Text.Trim();
-                    if (curentComment != string.Empty || (curentComment == string.Empty && initComment != string.Empty))
-                    {
-                        MyLeadsDA _saveComment = new MyLeadsDA();
-                        _saveComment.SaveUserComment(CmpStdId, curentComment, _loggedUser, clsId, attDate);
-                        initComment = curentComment;
-                        UserChange = true;
-                    }
-
-                    //reload lable changes
-                    MyLeads.Reload = true;
-
-                    var _selectedLbl = from r1 in tblLoadLbl.AsEnumerable()
-                                       join r2 in _selectedLblTbl.AsEnumerable()
-                                       on Convert.ToInt32(r1["LBL_ID"]) equals Convert.ToInt32(r2["LBL_ID"])
-                                       select r1.Field<string>("LBL_DES");
-
-                    MyLeads.SavedLableList = string.Join(", ", _selectedLbl);
-                    MyLeads.tobeInfoText = "";
-                    if (dtpAttendantDate.SelectedDate != null)
-                    {
-                        MyLeads.tobeInfoText = dtpAttendantDate.SelectedDate.Value.ToString("yyyy-MM-dd");
-                    }
-                    if (clsId != -1)
-                    {
-                        MyLeads.tobeInfoText = MyLeads.tobeInfoText + " " + cmbClass.Text;
-                    }
-
-                    if (userId != -1 && userId != UserId)
-                    {
-                        UserChange = true;
-                    }
-                    //reload lable changes
-
-                    ((FirstFloor.ModernUI.Windows.Controls.ModernWindow)this.Parent).Close();
-
-                }
-                catch (Exception ex)
-                {
-                    LogFile logger = new LogFile();
-                    logger.MyLogFile(ex);
-                    MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
                 }
             }
             //}
@@ -405,6 +450,73 @@ namespace CMSXtream.Pages.DataEntry
                 logger.MyLogFile(ex);
                 MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
             }
+        }
+
+        private void btnSendSMS()
+        {
+            try
+            {
+                if (CmpStdPhoneNumber == String.Empty || CmpStdPhoneNumber == "(0)-")
+                {
+                    MessageBox.Show("Telephone number is required!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.No);
+                    return;
+                }
+
+                string Telephone = CmpStdPhoneNumber.Replace(" ", "").Replace("(", "").Replace(")", "").Replace("-", "");
+                Telephone = PhoneNumberFormatter.AddLeadingZero(Telephone);
+                if (Telephone.Length != 10)
+                {
+                    MessageBox.Show("Incorrect Telephone number!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.No);
+                    return;
+                }
+
+                CMSXtream.Pages.DataEntry.SendSMS form = new CMSXtream.Pages.DataEntry.SendSMS();
+                PopupHelper dialog = new PopupHelper
+                {
+                    Title = "Sent SMS to Student " + Telephone,
+                    Content = form,
+                    ResizeMode = ResizeMode.NoResize,
+                    Width = 1100,
+                    Height = 680
+                };
+                form.btnAddNew.Visibility = System.Windows.Visibility.Hidden;
+                form.callingForm = true;
+                form.filteredTable = null;
+
+                form.txtRichBox.Text = GetMessageByTelephone(Telephone);
+                form.txtEmpNumber.Text = Telephone;                
+                form.txtTelephoneNumber.Text = Telephone;
+                form.LoadSMSHistory();
+                dialog.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                LogFile logger = new LogFile();
+                logger.MyLogFile(ex);
+                MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
+            }
+        }
+
+        public string GetMessageByTelephone(string telephone)
+        {
+            string msg = "";
+            AddLableToCmpStudentDA _saveLbl = new AddLableToCmpStudentDA();
+            DataTable dt = _saveLbl.GetFristMessage(telephone).Tables[0];
+            if (dt.Rows.Count > 0)
+            {
+                msg = dt.Rows[0][0].ToString();
+            }
+            return msg;
+        }
+
+        private Boolean SaveValidation()
+        {
+            if (chkNoMoreAttention.IsChecked != true && dtpAttendantDate.SelectedDate == null)
+            {
+                MessageBox.Show("You can not save the record without Attending Date!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.No);
+                return false;
+            }
+            return true;
         }
         public void GetClassesToCombo()
         {

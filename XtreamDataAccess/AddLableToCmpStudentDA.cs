@@ -99,5 +99,19 @@ namespace XtreamDataAccess
                 throw;
             }
         }
+
+        public DataSet GetFristMessage(String Telephone)
+        {
+            try
+            {
+                object[] parameterValues = { Telephone };
+                return SqlHelper.ExecuteDataset(getConnetctionString, "GetMessageByTelephone", parameterValues);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
     }
 }

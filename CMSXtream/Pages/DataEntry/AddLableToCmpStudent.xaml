@@ -77,8 +77,10 @@
         <Label  Grid.Row="8"  Content="Group :" HorizontalAlignment="Center" Width="100"  />
         <ComboBox x:Name="cmbClass" Grid.Row="8" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" Width="163" Height="30"/>
         <Label  Grid.Row="6"  Content="Attending Date :" HorizontalAlignment="Center" Width="100" />
-        <Label  Grid.Row="10"  Content="No more Attention" HorizontalAlignment="Left"   Grid.Column="2" Width="130"  VerticalAlignment="Center" Margin="20,0,0,0" />
-        <CheckBox x:Name="chkNoMoreAttention"  Grid.Row="10"   HorizontalAlignment="Left"   Grid.Column="2" Width="25" Checked="PCheckBox_Checked" />
+        <Label  Grid.Row="10"  Content="No more Attention" HorizontalAlignment="Left"   Grid.Column="2" Width="107"  VerticalAlignment="Center" Margin="20,0,0,0" />
+        <Label x:Name="lblFstSMS" Grid.Row="10"  Content="1st SMS" HorizontalAlignment="Left"   Grid.Column="2" Width="70"  VerticalAlignment="Center" Margin="150,0,0,0" />
+        <CheckBox x:Name="chkNoMoreAttention"  Grid.Row="10"   HorizontalAlignment="Left"   Grid.Column="2" Width="25" Checked="PCheckBox_Checked" Unchecked="chkNoMoreAttention_Unchecked" />
+        <CheckBox x:Name="chkFstSMS"  Grid.Row="10"   HorizontalAlignment="Left"   Grid.Column="2" Width="18" Margin="132,0,0,2"/>
         <Label  Grid.Row="10"  Content="Priority Level :" HorizontalAlignment="Center" Width="100" Grid.RowSpan="2" Height="30" VerticalAlignment="Top" />
         <GroupBox Grid.Row="6" Grid.Column="2" Grid.RowSpan="4" Margin="0,0,0,5" Header="Assigned User" >
             <Grid HorizontalAlignment="Left" >

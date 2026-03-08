@@ -31,13 +31,11 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal"  Grid.Row="1">
-                    <Image Source="/Image/LindsisLogo.png" Width="128" Margin="0,0,0,13"  />
-                    <TextBlock TextAlignment="Right" Width="469" > 
+                    <Image Source="/Image/LindsisLogoNaw.jpeg" Width="222" Margin="0,0,0,13"  />
+                    <TextBlock TextAlignment="Right" Width="373" > 
                         <Run Text="Lindsis English Institute"  FontSize="10" />
                         <LineBreak/>
-                        <Run Text="226, Suwarapola Junction," FontStyle="Italic" FontSize="9"/>
-                        <LineBreak/>
-                        <Run Text="Piliyandala."  FontStyle="Italic" FontSize="9"/>
+                        <Run Text="226, Suwarapola Junction,Piliyandala." FontStyle="Italic" FontSize="9"/>
                         <LineBreak/>
                         <Run Text="773 814 839, 112 619 536" FontSize="9"/>
                         <LineBreak/>
@@ -54,7 +52,7 @@
                     <TextBlock Text="Dear Student," VerticalAlignment="Bottom" FontSize="12" FontWeight="Bold" Foreground="#FF49658E"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="5" Margin="0,0,0,0"  >
-                    <TextBlock Text="Thank you for your payment." VerticalAlignment="Bottom" FontSize="12" FontWeight="Bold" Foreground="#FF49658E"/>
+                    <TextBlock Text="Thank you for your payment. We appreciate your trust in us" VerticalAlignment="Bottom" FontSize="12" FontWeight="Bold" Foreground="#FF49658E"/>
                 </StackPanel>
                 <StackPanel Grid.Row="7" HorizontalAlignment="Stretch"  Margin="0,0,0,0">
                     <Grid >

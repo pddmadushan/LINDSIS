@@ -494,18 +494,22 @@ namespace CMSXtream.Pages.DataEntry
                 if (selectedRow != null)
                 {
                     System.Data.DataTable table = new System.Data.DataTable();
-                    string note = selectedRow["STD_TEMP_NOTE"].ToString();
-                    if (note != "")
+                    var stdID = int.Parse(selectedRow["STD_ID"].ToString());
+                    if (stdID > 0)
                     {
-                        string StudentName = selectedRow["STD_INITIALS"].ToString();
-                        MessageBoxResult resultMessageBox = MessageBox.Show(" Note : " + note + "\n Do you want to delete special note?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                        if (resultMessageBox == MessageBoxResult.Yes)
+                        string note = selectedRow["STD_TEMP_NOTE"].ToString();
+                        if (note != "")
                         {
-                            Int32 studentID = int.Parse(selectedRow["STD_ID"].ToString());
-                            ClassAttendanceDA objClss = new ClassAttendanceDA();
-                            objClss.UpdateStudentNote(studentID);
-                            selectedRow["STD_TEMP_NOTE"] = null;
-                            
+                            string StudentName = selectedRow["STD_INITIALS"].ToString();
+                            MessageBoxResult resultMessageBox = MessageBox.Show(" Note : " + note + "\n Do you want to delete special note?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                            if (resultMessageBox == MessageBoxResult.Yes)
+                            {
+                                Int32 studentID = int.Parse(selectedRow["STD_ID"].ToString());
+                                ClassAttendanceDA objClss = new ClassAttendanceDA();
+                                objClss.UpdateStudentNote(studentID);
+                                selectedRow["STD_TEMP_NOTE"] = null;
+
+                            }
                         }
                     }
                 }
@@ -527,16 +531,19 @@ namespace CMSXtream.Pages.DataEntry
 
                     CMSXtream.Pages.DataEntry.AddLable form = new CMSXtream.Pages.DataEntry.AddLable();
                     form.STD_ID = int.Parse(selectedRow["STD_ID"].ToString());
-                    form.BindReasonGridFromForm();
-                    PopupHelper dialog = new PopupHelper
+                    if (form.STD_ID > 0)
                     {
-                        Title = "Define Student Labels",
-                        Content = form,
-                        ResizeMode = ResizeMode.NoResize,
-                        Width = 400,
-                        Height = 400
-                    };
-                    dialog.ShowDialog();
+                        form.BindReasonGridFromForm();
+                        PopupHelper dialog = new PopupHelper
+                        {
+                            Title = "Define Student Labels",
+                            Content = form,
+                            ResizeMode = ResizeMode.NoResize,
+                            Width = 400,
+                            Height = 400
+                        };
+                        dialog.ShowDialog();
+                    }
                 }
             }
             catch (Exception ex)

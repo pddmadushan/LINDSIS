@@ -31,13 +31,16 @@
             <GroupBox.Header>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="250"/>
+                        <ColumnDefinition Width="210"/>
                         <ColumnDefinition Width="225"/>
                         <ColumnDefinition Width="225"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="30"/>
                     </Grid.ColumnDefinitions>
                     <ComboBox x:Name="cmbUser" Width="200" Height="25" Grid.Column="0" HorizontalAlignment="Left" />
                     <ComboBox x:Name="cmbAddOrCmp" Grid.Column="1" Width="220" Height="25" SelectionChanged="cmbAddOrCmp_SelectionChanged" HorizontalAlignment="Left"/>
                     <ComboBox x:Name="cmbLoadedAddOrCmp" Grid.Column="2" Width="220" Height="25" HorizontalAlignment="Right"/>
+                    <mui:ModernButton x:Name="btnSendSMSALL" Grid.Column="4" IconData="{Binding Data, Source={StaticResource ImgSMS}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Send SMS" Height="27" Click="btnSendSMSALL_Click" />
                 </Grid>
             </GroupBox.Header>
             <Grid>
@@ -308,6 +311,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical">
+                                    <mui:ModernButton x:Name="btnEdit" IconData="{Binding Data, Source={StaticResource ImgEdit}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Edit Record" Click="btnEdit_Click" Visibility="{Binding IS_CLS_STD, Converter={StaticResource IntValueToVisibilityConverter}}"/>
                                     <mui:ModernButton x:Name="btnAddStudent" IconData="{Binding Data, Source={StaticResource ImgAttendance}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Change Lead as Student" Click="btnAddStudent_Click" Visibility="{Binding ISNOT_CLS_STD, Converter={StaticResource IntValueToVisibilityConverter}}" />
                                     <mui:ModernButton x:Name="btnTranferLead" IconData="{Binding Data, Source={StaticResource ImgTransfers}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Tranfer leads to another user" Click="btnTranferLead_Click" />
                                     <mui:ModernButton x:Name="btnRestoreStudent" IconData="{Binding Data, Source={StaticResource ImgRefresh}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Restore delted student" Visibility="{Binding IS_DELETED, Converter={StaticResource IntValueToVisibilityConverter}}" Click="btnRestoreStudent_Click"/>

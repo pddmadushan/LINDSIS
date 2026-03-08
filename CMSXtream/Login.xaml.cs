@@ -20,6 +20,7 @@ namespace WpfApplication2
             InitializeComponent();
             txtUserName.Focus();
             SetBackGrund();
+
             //SetTestLogin();
         }
 
@@ -27,7 +28,6 @@ namespace WpfApplication2
         {
             txtUserName.Text = "sysadmin";
             txtPassword.Password = "0772018009";
-            txtUserName.Text = "APSARA";
         }
         private void SetBackGrund()
         {

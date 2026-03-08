@@ -189,7 +189,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <CheckBox x:Name="chkAll" Grid.Row="0" Grid.ColumnSpan="3" Checked="chkAll_Checked" Margin="0,0,87,0" >All</CheckBox>
-                <TextBox Name="txtEmpNumber"  Grid.Row="1" MaxLines="1" MaxLength="8" Margin="0,5,417.442,5" Grid.ColumnSpan="3" />
+                <TextBox Name="txtEmpNumber"  Grid.Row="1" MaxLines="1" MaxLength="10" Margin="0,5,417.442,5" Grid.ColumnSpan="3" />
                 <mui:ModernButton Grid.Row="1"  x:Name="btnSearchSMS" IconData="{Binding Data, Source={StaticResource ImgSearch}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Search History" RenderTransformOrigin="7.112,0.419" Margin="40,0,371.442,0" Grid.Column="2" Click="btnSearchSMS_Click" />
 
                 <ScrollViewer Grid.Row="2" Grid.ColumnSpan="3" Height="535" VerticalAlignment="Top" HorizontalAlignment="Left" Width="406" Margin="0,0,0,0">

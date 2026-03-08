@@ -583,6 +583,9 @@
     <Content Include="Image\LindsisLogo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Image\LindsisLogoNaw.jpeg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="LIMS.ico" />
   </ItemGroup>
   <ItemGroup>

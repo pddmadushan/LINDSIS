@@ -161,7 +161,7 @@
                     <DataGridTemplateColumn Width="38"   >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <mui:ModernButton x:Name="btnViewInvoice" IconData="{Binding Data, Source={StaticResource ImgPrint}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Send SMS" Click="btnViewInvoice_Click" />
+                                <mui:ModernButton x:Name="btnViewInvoice" IconData="{Binding Data, Source={StaticResource ImgPrint}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Print Invoice" Click="btnViewInvoice_Click" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

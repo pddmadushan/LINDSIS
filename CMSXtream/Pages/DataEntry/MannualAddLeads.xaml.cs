@@ -9,6 +9,8 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using System.Globalization;
 using System.Windows.Data;
+using CMSXtream.Handlers;
+using System.Windows.Threading;
 
 namespace CMSXtream.Pages.DataEntry
 {
@@ -20,6 +22,8 @@ namespace CMSXtream.Pages.DataEntry
         DataTable tblManualLead;
         public string OutResult { get; set; }
         public ObservableCollection<int> DataCollection { get; set; }
+        public string TelePhone = "";
+        public bool AddFromSearch = false;
         public MannualAddLeads()
         {
             OutResult = "";
@@ -31,6 +35,13 @@ namespace CMSXtream.Pages.DataEntry
             btnSave.Visibility = Visibility.Visible;
             btnClose.Visibility = Visibility.Hidden;
         }
+        public MannualAddLeads(string telPhpne) : this()
+        {
+            TelePhone = telPhpne;
+            AddFromSearch = true;
+            GridDataBind();
+        }
+        
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
@@ -48,6 +59,8 @@ namespace CMSXtream.Pages.DataEntry
         private void GridDataBind()
         {
             try {
+                grdManualLead.Focus();
+                grdManualLead.SelectedIndex = 0;
                 tblManualLead = new DataTable();
                 tblManualLead.Columns.Add("CMP_STD_ID", typeof(int));
                 tblManualLead.Columns.Add("STD_FIRST_NAME", typeof(String));
@@ -57,11 +70,12 @@ namespace CMSXtream.Pages.DataEntry
                 tblManualLead.Columns.Add("INV", typeof(int));
                 tblManualLead.Columns["INV"].DefaultValue = 0;
                 tblManualLead.Columns["CMP_STD_ID"].DefaultValue = 0;
-                tblManualLead.Columns["STD_TELEPHONE"].DefaultValue = "";
+                //tblManualLead.Columns["STD_TELEPHONE"].DefaultValue = TelePhone;
                 grdManualLead.ItemsSource = tblManualLead.DefaultView;
 
-                //tblManualLead.Columns["STD_TELEPHONE"].AllowDBNull=true;
-                tblManualLead.Rows.Add();//load 1st row
+                DataRow newRow = tblManualLead.NewRow();
+                newRow["STD_TELEPHONE"] = PhoneNumberFormatter.AddLeadingZero(TelePhone);
+                tblManualLead.Rows.Add(newRow);//load 1st row                          
             }
             catch (Exception ex)
             {
@@ -69,6 +83,28 @@ namespace CMSXtream.Pages.DataEntry
                 logger.MyLogFile(ex);
                 MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
             }
+        }
+
+        public DataTable CreateNewTableManual(DataTable sourceTable)
+        {
+            DataTable newTable = new DataTable();
+            newTable.Columns.Add("CMP_STD_ID", typeof(int));
+            newTable.Columns.Add("STD_FIRST_NAME", typeof(String));
+            newTable.Columns.Add("STD_LAST_NAME", typeof(String));
+            newTable.Columns.Add("STD_TELEPHONE", typeof(string));
+            newTable.Columns.Add("USER_COMMENT", typeof(string));
+
+            foreach (DataRow row in sourceTable.Rows)
+            {
+                newTable.Rows.Add(
+                    row["CMP_STD_ID"],
+                    row["STD_FIRST_NAME"],
+                    row["STD_LAST_NAME"],
+                     row["STD_TELEPHONE"],
+                     row["USER_COMMENT"]
+                );
+            }
+            return newTable;
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
@@ -113,23 +149,26 @@ namespace CMSXtream.Pages.DataEntry
                                     //}
                                     if (save)
                                     {
-                                        if (tblManualLead.Columns["INV"] != null)
-                                        {
-                                            tblManualLead.Columns.Remove("INV");
-                                        }
+                                        
                                         int _cmpId = int.Parse(cmbCampaigns.SelectedValue.ToString());
                                         string _loggedUser = StaticProperty.LoginUserID;
                                         MannualAddLeadsDA Dupld = new MannualAddLeadsDA();
 
                                         DataTable retManualLead = new DataTable();
-                                        retManualLead = Dupld.ManualLeadInsert(tblManualLead, _cmpId, _user, _loggedUser,adDate,addName);
-                                        grdManualLead.ItemsSource = retManualLead.DefaultView; 
+                                        retManualLead = Dupld.ManualLeadInsert(CreateNewTableManual(tblManualLead), _cmpId, _user, _loggedUser,adDate,addName);
+                                        grdManualLead.ItemsSource = retManualLead.DefaultView;
 
-                                        btnSave.Visibility = Visibility.Hidden;
-                                        btnClose.Visibility = Visibility.Visible;
-                                        MessageBox.Show("Upload complete.Now you can add lables");
+                                        if (TelePhone != string.Empty)
+                                        {
+                                            ((FirstFloor.ModernUI.Windows.Controls.ModernWindow)this.Parent).Close();
+                                        }
+                                        else
+                                        {
+                                            btnSave.Visibility = Visibility.Hidden;
+                                            btnClose.Visibility = Visibility.Visible;
+                                            MessageBox.Show("Upload complete.Now you can add lables");                                            
+                                        }
                                         OutResult = "OK";
-                                        //((FirstFloor.ModernUI.Windows.Controls.ModernWindow)this.Parent).Close();
                                     }
                                 }
                                 else
@@ -194,14 +233,19 @@ namespace CMSXtream.Pages.DataEntry
             try
             {
                 if (e.Key == Key.Enter)
-
                 {
+                    if(TelePhone!= string.Empty)
+                    {
+                        MessageBox.Show("You can not enter more student from here", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.No);
+                        return;
+                    }
                     int count = grdManualLead.Items.Count;
                     if (grdManualLead.SelectedIndex == (count - 1))
                     {
                         //e.Handled = true; // Prevent the default behavior (move to the next row)
                         tblManualLead.Rows.Add();
-                        grdManualLead.CurrentCell = new DataGridCellInfo(grdManualLead.Items[count], grdManualLead.Columns[0]);//cursor set to 1st cell
+                        grdManualLead.SelectedIndex = count;
+                        grdManualLead.CurrentCell = new DataGridCellInfo(grdManualLead.Items[count], grdManualLead.Columns[1]);
                     }
                 }
             }
@@ -282,6 +326,11 @@ namespace CMSXtream.Pages.DataEntry
         {
             try
             {
+                foreach (DataRow row in tblManualLead.Rows)
+                {
+                    row["STD_TELEPHONE"] = PhoneNumberFormatter.AddLeadingZero(row["STD_TELEPHONE"].ToString());
+                }
+
                 int count=-1;
                 if (tblManualLead.Columns["INV"] != null)
                 {
@@ -348,18 +397,18 @@ namespace CMSXtream.Pages.DataEntry
                     int _cmpStdId = int.Parse(selectedRow["CMP_STD_ID"].ToString());
 
                     form.CmpStdId = _cmpStdId;
+                    form.CmpStdPhoneNumber = PhoneNumberFormatter.AddLeadingZero(selectedRow["STD_TELEPHONE"].ToString());
+                    form.AddFromSearch = AddFromSearch;
                     form.LoadLables();
                     form.GetClassesToCombo();
                     PopupHelper dialog = new PopupHelper
                     {
-                        Title = "Define Leads Labels",
+                        Title = PhoneNumberFormatter.Format(selectedRow["STD_TELEPHONE"].ToString()) + " - " + selectedRow["STD_FULL_NAME"].ToString(),
                         Content = form,
                         ResizeMode = ResizeMode.NoResize,
                         Width = form.Width,
                         Height = form.Height,
-                    };
-                    form.initComment = selectedRow["USER_COMMENT"].ToString();
-
+                    };                    
                     dialog.ShowDialog();
 
                 }

@@ -22,6 +22,7 @@ namespace CMSXtream.Pages.View
         DataTable tblAddList;
         DataTable tblCmpList;
         DataTable tblUsers;
+        DataTable tblGroups;
         DataSet dsCmPAndAddaAndUser;
         int IsdateFiltered;
         public static int ToUserId=-1;
@@ -29,6 +30,8 @@ namespace CMSXtream.Pages.View
         int IsAttdateFiltered;
         int IsPrirityFiltered;
         int DeletedCount;
+        System.Data.DataTable TblUsers;
+        public static Boolean TotalClick = false;
         public DBSearch()
         {
             InitializeComponent();
@@ -123,8 +126,9 @@ namespace CMSXtream.Pages.View
                 //cmbAddOrCmp.Items.Add(new KeyValuePair<string, string>("-1", "--All--(Campaigns & Adds)"));
                 cmbAddOrCmp.Items.Add(new KeyValuePair<string, string>("1", "Campaign"));
                 //cmbAddOrCmp.Items.Add(new KeyValuePair<string, string>("2", "Add Name"));
+                cmbAddOrCmp.Items.Add(new KeyValuePair<string, string>("3", "Group"));
 
-                cmbAddOrCmp.SelectedValue = 1;
+                cmbAddOrCmp.SelectedValue = 3;
             }
             catch (Exception ex)
             {
@@ -170,6 +174,7 @@ namespace CMSXtream.Pages.View
 
                 tblAddList = dsCmPAndAddaAndUser.Tables[0];
                 tblCmpList = dsCmPAndAddaAndUser.Tables[1];
+                tblGroups = dsCmPAndAddaAndUser.Tables[3];
             }
             catch (Exception ex)
             {
@@ -199,6 +204,14 @@ namespace CMSXtream.Pages.View
                         cmbLoadedAddOrCmp.ItemsSource = tblAddList.DefaultView;
                         cmbLoadedAddOrCmp.DisplayMemberPath = "ADD_DES";
                         cmbLoadedAddOrCmp.SelectedValuePath = "ID";
+                        cmbLoadedAddOrCmp.SelectedValue = -1;
+                        cmbLoadedAddOrCmp.IsEnabled = true;
+                    }
+                    if (cmbSelVal == 3)
+                    {
+                        cmbLoadedAddOrCmp.ItemsSource = tblGroups.DefaultView;
+                        cmbLoadedAddOrCmp.DisplayMemberPath = "CLS_NAME";
+                        cmbLoadedAddOrCmp.SelectedValuePath = "CLS_ID";
                         cmbLoadedAddOrCmp.SelectedValue = -1;
                         cmbLoadedAddOrCmp.IsEnabled = true;
                     }
@@ -243,6 +256,17 @@ namespace CMSXtream.Pages.View
                 }
                 if (result == MessageBoxResult.Yes)
                 {
+                    int filterByNameOrPhone = int.Parse(cmbTpOrName.SelectedValue.ToString());
+                    var filteText = txtbox.Text;
+                    if (filterByNameOrPhone == 1 && filteText != null && filteText != "")
+                    {
+                        filteText = PhoneNumberFormatter.AddLeadingZero(filteText);
+                        if (!IsValidPhoneNumber(filteText))
+                        {
+                            MessageBox.Show("Invalid Mobile Numbers are found!");
+                            return;
+                        }                    
+                    }
                     LoadSearchData();
                 }
             }
@@ -253,6 +277,23 @@ namespace CMSXtream.Pages.View
                 MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
             }
         }
+
+        public static bool IsValidPhoneNumber(string phone)
+        {
+            if (string.IsNullOrWhiteSpace(phone))
+                return false;
+
+            phone = phone.Replace(" ", "");
+
+            if (!phone.All(char.IsDigit))
+                return false;
+
+            if (phone.Length !=10)
+                return false;
+
+            return true;
+        }
+
         private void LoadSearchData()
         {
             try
@@ -269,7 +310,7 @@ namespace CMSXtream.Pages.View
                 int? cmpId = null;
                 string addName = null;
                 string filteText;
-                if (filterByCmpOrAdd == 1)
+                if (filterByCmpOrAdd == 1 || filterByCmpOrAdd == 3)
                 {
                     cmpId = int.Parse(cmbLoadedAddOrCmp.SelectedValue.ToString());
                 }
@@ -284,7 +325,13 @@ namespace CMSXtream.Pages.View
                 else
                 {
                     user = -1;
+                    cmpId = -1;
+                    filterByCmpOrAdd = -1;
                     filteText = txtbox.Text;
+                    if (filterByNameOrPhone == 1 && filteText != null && filteText != "")
+                    {
+                        filteText = PhoneNumberFormatter.AddLeadingZero(filteText);
+                    }
                 }
 
                 if (IsPrirityFiltered == 1) 
@@ -310,6 +357,27 @@ namespace CMSXtream.Pages.View
                 lblUnReg.Content = unRegCount.ToString();
                 lblDelRec.Content = DeletedCount.ToString();
                 lblNoMrAttRec.Content = quarry3.Count().ToString();
+
+                //IF SEARCH BY TELL, and not find the result neet to open the popup with the number to add
+                if (filterByNameOrPhone == 1 && filteText != null &&  filteText != "" && total == 0)
+                {
+                    CMSXtream.Pages.DataEntry.MannualAddLeads MannualAddLeads = new CMSXtream.Pages.DataEntry.MannualAddLeads(filteText);
+                    PopupHelper dialog = new PopupHelper
+                    {
+                        Title = "Add Leads",
+                        Content = MannualAddLeads,
+                        ResizeMode = ResizeMode.CanResize,
+                        Width = 1200,
+                        Height = MannualAddLeads.Height,
+                        WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                    };
+                    dialog.ShowDialog();
+                    string ReturnMessage = MannualAddLeads.OutResult;
+                    if (ReturnMessage != string.Empty && ReturnMessage != null)
+                    {
+                        LoadSearchData();
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -827,12 +895,215 @@ namespace CMSXtream.Pages.View
 
                         if (STD > 0)
                         {
-                            MessageBox.Show("Please manually refresh", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.No);
+                            Mouse.OverrideCursor = Cursors.Wait;
+                            LoadSearchData();
                         }
                         else
                         {
                             MessageBox.Show("Cannot add this Lead as Student because the telephone number already exists with an \b\b Active\b\b or \b\bTemporarily Inactive student\b\b. \n Mobile number is associated with Student ID : " + STD, StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
                         }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogFile logger = new LogFile();
+                logger.MyLogFile(ex);
+                MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
+            }
+            finally
+            {
+                Mouse.OverrideCursor = null;
+            }
+        }
+
+        private void btnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var selectedRow = grdLeadData.SelectedItem as System.Data.DataRowView;
+                if (selectedRow != null)
+                {
+                    CMSXtream.Pages.DataEntry.Student form = new CMSXtream.Pages.DataEntry.Student();
+                    PopupHelper dialog = new PopupHelper
+                    {
+                        Title = "Edit Student",
+                        Content = form,
+                        ResizeMode = ResizeMode.NoResize,
+                        Width = 1000
+                    };
+                    StudentAttribute stAttPass = new StudentAttribute();
+
+                    if (int.Parse(selectedRow["STD_ID"].ToString()) > 0)
+                    {
+                        StudentDA stDA = new StudentDA();
+                        stDA.STD_ID = int.Parse(selectedRow["STD_ID"].ToString());
+                        var selectedTable = stDA.SelectStudent().Tables[0].Rows[0];
+                        stAttPass.STD_ID = int.Parse(selectedTable["STD_ID"].ToString());
+                        stAttPass.CLS_ID = int.Parse(selectedTable["CLS_ID"].ToString());
+                        stAttPass.CLS_NAME = selectedTable["CLS_NAME"].ToString();
+                        stAttPass.STD_INITIALS = selectedTable["STD_INITIALS"].ToString();
+                        stAttPass.STD_SURNAME = selectedTable["STD_SURNAME"].ToString();
+                        stAttPass.STD_FULL_NAME = selectedTable["STD_FULL_NAME"].ToString();
+                        stAttPass.STD_GENDER = Int32.Parse(selectedTable["STD_GENDER"].ToString());
+                        stAttPass.STD_DATEOFBIRTH = DateTime.Parse(selectedTable["STD_DATEOFBIRTH"].ToString());
+                        stAttPass.STD_JOIN_DATE = DateTime.Parse(selectedTable["STD_JOIN_DATE"].ToString());
+                        stAttPass.STD_EMAIL = selectedTable["STD_EMAIL"].ToString();
+                        stAttPass.STD_NIC = selectedTable["STD_NIC"].ToString();
+                        stAttPass.STD_ADDRESS = selectedTable["STD_ADDRESS"].ToString();
+                        stAttPass.STD_CLASS_FEE = double.Parse(selectedTable["STD_CLASS_FEE"].ToString());
+                        stAttPass.STD_TELEPHONE = selectedTable["STD_TELEPHONE"].ToString();
+                        stAttPass.STD_ACTIVE_FLG = selectedTable["STD_ACTIVE_FLG"].ToString() == "" ? 2 : int.Parse(selectedTable["STD_ACTIVE_FLG"].ToString());
+                        stAttPass.STD_COMMENT = selectedTable["STD_COMMENT"].ToString();
+                        stAttPass.STD_TEMP_NOTE = selectedTable["STD_TEMP_NOTE"].ToString();
+                        stAttPass.RSN_ID = Int32.Parse(selectedTable["RSN_ID"].ToString());
+                    }
+
+                    form.IsAddNew = false;
+                    form.stAtt = stAttPass;
+                    form.LoadFormContaint();
+                    dialog.ShowDialog();
+                    string ReturnMessage = form.OutResult;
+                    if (ReturnMessage != string.Empty && ReturnMessage != null)
+                    {
+                        Mouse.OverrideCursor = Cursors.Wait;
+                        LoadSearchData();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogFile logger = new LogFile();
+                logger.MyLogFile(ex);
+                MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
+            }
+            finally
+            {
+                Mouse.OverrideCursor = null;
+            }
+        }
+        private void btnSendSMSALL_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+                int rowCount = grdLeadData.Items.Count;
+                if (rowCount > 0)
+                {
+                    System.Data.DataTable table = new System.Data.DataTable();
+                    table.Columns.Add("STD_ID", typeof(Int32));
+                    table.Columns.Add("CLS_ID", typeof(Int32));
+                    table.Columns.Add("STD_INITIALS", typeof(string));
+                    table.Columns.Add("CLS_NAME", typeof(string));
+                    table.Columns.Add("STD_TELEPHONE", typeof(string));
+
+                    for (int i = 0; i < rowCount; i++)
+                    {
+                        var selectedRow = (System.Data.DataRowView)grdLeadData.Items[i];
+                        Int32 studentID = int.Parse(selectedRow["STD_ID"].ToString() != "" ? selectedRow["STD_ID"].ToString() : "0");
+                        string Telephone = selectedRow["STD_TELEPHONE"].ToString();
+                        string StudentName = selectedRow["STD_FULL_NAME"].ToString();
+                        string className = selectedRow["CMP_DES"].ToString();
+                        Int32 classID =0;
+                        table.Rows.Add(studentID, classID, StudentName, className, Telephone);
+                    }
+
+                    CMSXtream.Pages.DataEntry.SendSMS form = new CMSXtream.Pages.DataEntry.SendSMS();
+                    PopupHelper dialog = new PopupHelper
+                    {
+                        Title = "Sent SMS to Student ",
+                        Content = form,
+                        ResizeMode = ResizeMode.NoResize,
+                        Width = 1000,
+                        Height = 680
+                    };
+                    form.btnAddNew.Visibility = System.Windows.Visibility.Hidden;
+                    form.callingForm = true;
+                    form.filteredTable = table;
+                    form.BindStudentGrid();
+                    dialog.ShowDialog();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                LogFile logger = new LogFile();
+                logger.MyLogFile(ex);
+                MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
+            }
+        }
+
+        private void btnTranferLead_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                System.Data.DataTable _tblusers;
+                string assgnedUser;
+                int cmpStdId;
+                var selectedLead = grdLeadData.SelectedItem as System.Data.DataRowView;
+
+                if (selectedLead != null)
+                {
+                    DataRow dr = selectedLead.Row;
+                    cmpStdId = int.Parse(dr["CMP_STD_ID"].ToString());
+                    assgnedUser = dr["ASSIGNED_USER"].ToString();
+
+                    if (TblUsers == null)
+                    {
+                        MyLeadsDA _loadUsers = new MyLeadsDA();
+                        TblUsers = _loadUsers.GetUsers().Tables[0];
+                    }
+                    _tblusers = TblUsers.Copy();
+                    var selectedUser = _tblusers.AsEnumerable().Where(r => Convert.ToString(r["USER_NAME"]) == assgnedUser);
+
+                    if (selectedUser.Any())
+                    {
+                        DataRow dataRow = selectedUser.First();
+
+                        if (dataRow != null)
+                        {
+                            _tblusers.Rows.Remove(dataRow);
+                        }
+                    }
+                    int _columnIndex = GetColumnIndex("clmTransferLead");
+                    int row_id = grdLeadData.SelectedIndex;
+                    DataGridCell cell = GetCell(row_id, _columnIndex, grdLeadData);
+                    System.Windows.Controls.Button btntransfer = GetVisualChild<System.Windows.Controls.Button>(cell);
+                    System.Windows.Point point = btntransfer.PointToScreen(new System.Windows.Point(0, 0));
+                    CMSXtream.Pages.DataEntry.LeadTranferUserSelect form = new CMSXtream.Pages.DataEntry.LeadTranferUserSelect();
+                    PopupHelper dialog = new PopupHelper
+                    {
+                        Title = "Select User",
+                        Content = form,
+                        ResizeMode = ResizeMode.NoResize,
+                        MaxWidth = 800,
+                        MaxHeight = 500,
+                        WindowStartupLocation = WindowStartupLocation.CenterScreen,
+
+                    };
+                    form.BindUserList(_tblusers, assgnedUser, false, false, true, cmpStdId, null);
+                    dialog.ShowDialog();
+
+                    try
+                    {
+                        if (IsLeadTransfered)
+                        {
+                            DBSearchDA chngUser = new DBSearchDA();
+                            chngUser.CHANGE_LEADS_USER_SelRow(cmpStdId, ToUserId, assgnedUser, StaticProperty.LoginUserID);
+
+                            IsLeadTransfered = false;
+                            var assignUser = _tblusers.AsEnumerable().FirstOrDefault(r => Convert.ToInt32(r["ID"]) == ToUserId);
+                            if (assignUser != null)
+                            {
+                                LoadSearchData();
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        LogFile logger = new LogFile();
+                        logger.MyLogFile(ex);
+                        MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
                     }
                 }
             }

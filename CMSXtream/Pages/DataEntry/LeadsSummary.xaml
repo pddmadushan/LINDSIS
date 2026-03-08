@@ -22,7 +22,7 @@
             <ColumnDefinition Width="10"  />
             <ColumnDefinition Width="738"  />
             <ColumnDefinition Width="9"/>
-            <ColumnDefinition Width="200"  />
+            <ColumnDefinition Width="220"  />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -287,7 +287,7 @@
                 </DataGrid>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Column="5" Grid.Row="1" Width="120" HorizontalAlignment="Left" Margin="10,12,0,0" Height="auto" Grid.RowSpan="4" VerticalAlignment="Top">
+        <GroupBox Grid.Column="5" Grid.Row="1" Width="200" HorizontalAlignment="Left" Margin="10,12,0,0" Height="auto" Grid.RowSpan="4" VerticalAlignment="Top">
             <GroupBox.Header>
                 <Grid Width="auto">
                     <Grid.ColumnDefinitions>
@@ -300,7 +300,7 @@
             </GroupBox.Header>
             <Grid>
             <DataGrid x:Name="grdGroups" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"  Height="auto" VerticalAlignment="Top" Background="White"
-                      FontSize="12"   VirtualizingStackPanel.IsVirtualizing="False" d:ItemsSource="{d:SampleData}" RowHeaderWidth="0" HeadersVisibility="All" MinRowHeight="50"  Width="120" HorizontalAlignment="Left">
+                      FontSize="12"   VirtualizingStackPanel.IsVirtualizing="False" d:ItemsSource="{d:SampleData}" RowHeaderWidth="0" HeadersVisibility="All" MinRowHeight="50"  Width="200" HorizontalAlignment="Left">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Width="*" Header="Groups to come" >
                         <DataGridTemplateColumn.CellTemplate >
@@ -309,7 +309,7 @@
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="40"/>
-                                            <ColumnDefinition Width="50"/>
+                                            <ColumnDefinition Width="60"/>
                                         </Grid.ColumnDefinitions>
                                     <Label x:Name="lblLeadCount" FontWeight="Bold" Content="{Binding STD_COUNT}" HorizontalAlignment="Center" Width="auto" Grid.Column="0"/>
                                         <mui:ModernButton x:Name="btnClsAttList" IconData="{Binding Data, Source={StaticResource ImgStudents}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="View Class Group Student" HorizontalAlignment="Center" Grid.Column="1" Click="btnClsAttList_Click"/>
@@ -332,7 +332,7 @@
                 </TextBlock>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Column="5" Grid.Row="0" Width="120" HorizontalAlignment="Left" Margin="10,0,0,0" Height="auto" VerticalAlignment="Top">
+        <GroupBox Grid.Column="5" Grid.Row="0" Width="200" HorizontalAlignment="Left" Margin="10,0,0,0" Height="auto" VerticalAlignment="Top">
             <GroupBox.Header>
                 <Grid Width="auto">
                     <Grid.ColumnDefinitions>

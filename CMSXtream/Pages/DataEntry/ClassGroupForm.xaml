@@ -112,9 +112,8 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Label  Content="Classes in Group:" Grid.Row="0" Grid.Column="0"  FontWeight="Bold"/>
-                    <GroupBox Grid.Column="1" Margin="0,0,57,0">
-                    <DataGrid Name="grdSubClass"   AutoGenerateColumns="False"  CanUserAddRows="False" RowHeaderWidth="0"  CanUserDeleteRows="False" Height="225" Visibility="Hidden" >
+                    <GroupBox Name="grdSubClassPnl"  Grid.Column="1"  Margin="0,0,57,0" Header="Classes in Group" Visibility="Hidden" >
+                        <DataGrid Name="grdSubClass" AutoGenerateColumns="False"  CanUserAddRows="False" RowHeaderWidth="0"  CanUserDeleteRows="False" Height="225" >
                             <DataGrid.Columns  >
                                 <DataGridTextColumn Header="ID" Binding="{Binding Path=CLS_ID}" IsReadOnly="True" Width="50" />
                                 <DataGridTextColumn Header="Description" Binding="{Binding Path=CLS_NAME}" IsReadOnly="True" Width="230"  />

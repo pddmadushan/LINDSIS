@@ -734,22 +734,24 @@ namespace CMSXtream.Pages.DataEntry
                     string returnMsg = table.Rows[0]["RETURN_MSG"].ToString();
                     OutResult = returnMsg;
 
-                    if (lblStudentId.Content.ToString() == "[New Student]")
-                    {
-                        lblStudentId.Content = table.Rows[0]["STD_ID"].ToString();
-                        MessageBox.Show(OutResult, StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.No);
+                    // if (lblStudentId.Content.ToString() == "[New Student]")
+                    //{
+                    lblStudentId.Content = table.Rows[0]["STD_ID"].ToString();
+                    MessageBox.Show(OutResult, StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.No);
+                    OutResult = "";
 
-                        btnAddIntroducer.Visibility = System.Windows.Visibility.Visible;
-                        btnveiwStudent.Visibility = System.Windows.Visibility.Visible;
 
-                        grpStudentHistory.Visibility = Visibility.Visible;
-                        BindClassHistoryGrid();
-                        BindAccosryHistoryGrid();
-                    }
-                    else
-                    {
-                        ((FirstFloor.ModernUI.Windows.Controls.ModernWindow)this.Parent).Close();
-                    }
+                    btnAddIntroducer.Visibility = System.Windows.Visibility.Visible;
+                    btnveiwStudent.Visibility = System.Windows.Visibility.Visible;
+
+                    grpStudentHistory.Visibility = Visibility.Visible;
+                    BindClassHistoryGrid();
+                    BindAccosryHistoryGrid();
+                    //}
+                    //else
+                    //{
+                    //    ((FirstFloor.ModernUI.Windows.Controls.ModernWindow)this.Parent).Close();
+                    //}
 
                 }
                 catch (Exception ex)

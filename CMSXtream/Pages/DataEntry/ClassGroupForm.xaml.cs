@@ -19,6 +19,8 @@ namespace CMSXtream.Pages.DataEntry
         public ClassGroupAttribute clasAtt;
         public Double ClassFee { get; set; }
 
+        private bool _suppressCheckedEvent;
+
         public ClassGroupForm()
         {
             InitializeComponent();
@@ -58,7 +60,11 @@ namespace CMSXtream.Pages.DataEntry
                 chkActive.IsChecked = clasAtt.CLS_ACTIVE_FLG == 0 ? false : true;
                 txtComment.Text = clasAtt.CLS_COMMENT.ToString();
                 txtWeekNumber.Text = clasAtt.TOTAL_NUMBER_OF_WEEK.ToString();
+
+                _suppressCheckedEvent = true;
                 rdbtnClass.IsChecked = clasAtt.IS_CLASS_FLG == 1 ? true : false;
+                _suppressCheckedEvent = false;
+
                 txtCouseFee.Text = clasAtt.COUSE_FEE.ToString();
                 dtpStartDate.SelectedDate = clasAtt.CLS_START_DATE;
                 chkShowinWeb.IsChecked = clasAtt.SHOW_IN_WEB_FLG == 0 ? false : true;
@@ -569,6 +575,9 @@ namespace CMSXtream.Pages.DataEntry
         {
             try
             {
+                if (_suppressCheckedEvent)
+                    return;
+
                 grdClassInfo.Visibility = System.Windows.Visibility.Visible;
                 grdClassSubGroup.Visibility = System.Windows.Visibility.Hidden;
                 setDefault();
@@ -585,6 +594,9 @@ namespace CMSXtream.Pages.DataEntry
         {
             try
             {
+                if (_suppressCheckedEvent)
+                    return;
+
                 grdClassInfo.Visibility = System.Windows.Visibility.Hidden;
                 grdClassSubGroup.Visibility = System.Windows.Visibility.Visible;
             }

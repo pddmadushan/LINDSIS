@@ -29,11 +29,11 @@
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="5"/>
-            <RowDefinition Height="200"/>
+            <RowDefinition Height="400"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Label Content="User : " VerticalAlignment="Center" Grid.Column="0" Grid.Row="0"/>
-        <ComboBox x:Name="cmbUsers" Height="25" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left"/>        
+        <ComboBox x:Name="cmbUsers" Height="25" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left"/>
         <Label Content="Add Date :" VerticalAlignment="Center" Grid.Column="0" Grid.Row="2"/>
         <DatePicker x:Name="dtpAddDate" Width="120" Height="25" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="2" SelectedDate="{x:Static sys:DateTime.Now}">
             <DatePicker.Resources>
@@ -47,16 +47,16 @@
         <Label Content="Campaign : " VerticalAlignment="Center" Grid.Column="0" Grid.Row="1"/>
         <ComboBox x:Name="cmbCampaigns" Height="25" Grid.Column="1" Grid.Row="1"   />
         <mui:ModernButton x:Name="btnRefresh" IconData="{Binding Data, Source={StaticResource ImgRefresh}}"  EllipseDiameter="20" EllipseStrokeThickness="1" ToolTip="Refresh " Height="26" VerticalAlignment="Center" HorizontalAlignment="Left" Width="22" Click="btnRefresh_Click" Grid.Column="2" Grid.Row="1" />
-        <DataGrid x:Name="grdManualLead" Grid.Row="4"  Width="Auto" Height="350" Grid.ColumnSpan="5" AutoGenerateColumns="False" CanUserAddRows="False"   CanUserDeleteRows="False"  VirtualizingStackPanel.IsVirtualizing="False" MinRowHeight="30" IsReadOnly="False" VerticalAlignment="Top" LoadingRow="grdManualLead_LoadingRow"  d:ItemsSource="{d:SampleData}" HorizontalAlignment="Left" RowHeaderWidth="35" PreviewKeyDown="DataGrid_PreviewKeyDown" >
+        <DataGrid x:Name="grdManualLead" Grid.Row="4"  Width="Auto" Height="370" Grid.ColumnSpan="3" AutoGenerateColumns="False" CanUserAddRows="False"   CanUserDeleteRows="False"  VirtualizingStackPanel.IsVirtualizing="False" MinRowHeight="30" IsReadOnly="False" VerticalAlignment="Top" LoadingRow="grdManualLead_LoadingRow"  d:ItemsSource="{d:SampleData}" HorizontalAlignment="Left" RowHeaderWidth="35" PreviewKeyDown="DataGrid_PreviewKeyDown" >
             <DataGrid.Resources>
                 <mycls:DoubleToVisaulConverter x:Key="DoubleToVis" />
             </DataGrid.Resources>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="St.ID" Width="300" Binding="{Binding CMP_STD_ID}" Visibility="Hidden"/>
-                <DataGridTextColumn Header="First Name" Width="250" Binding="{Binding STD_FIRST_NAME}"/>
+                <DataGridTextColumn Header="Mobile" Width="100" Binding="{Binding STD_TELEPHONE,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  />
+                <DataGridTextColumn Header="First Name" Width="250" Binding="{Binding STD_FIRST_NAME,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                 <DataGridTextColumn Header="Last Name" Width="300" Binding="{Binding STD_LAST_NAME}" Visibility="Hidden"/>
-                <DataGridTextColumn Header="Mobile" Width="100" Binding="{Binding STD_TELEPHONE}"  />
-                <DataGridTextColumn Header="Comment" Width="300" Binding="{Binding USER_COMMENT}"/>
+                <DataGridTextColumn Header="Comment" Width="300" Binding="{Binding USER_COMMENT}" Visibility="Hidden"/>
                 <DataGridTemplateColumn x:Name="addLable"  Width="37" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -88,8 +88,8 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="btnSave" Content="Save"  ToolTip="Save Records " Height="25" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100" Click="btnSave_Click" Grid.Column="0" Grid.Row="5"  Background="AliceBlue" />
-        <Button x:Name="btnClose" Content="Close"  ToolTip="Close " Height="25" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100" Grid.Column="2" Grid.Row="5"  Background="AliceBlue" Click="btnClose_Click" />
+        <Button x:Name="btnSave" Content="Save"  ToolTip="Save Records " Height="25" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100" Click="btnSave_Click" Grid.Column="1" Grid.Row="2"  Background="AliceBlue" Grid.ColumnSpan="2" Margin="267,0,0,0" />
+        <Button x:Name="btnClose" Content="Close"  ToolTip="Close " Height="26" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100" Grid.Column="1" Grid.Row="2"  Background="AliceBlue" Click="btnClose_Click" Margin="267,0,0,0" Grid.ColumnSpan="2" />
 
     </Grid>
 </UserControl>

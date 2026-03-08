@@ -14,5 +14,13 @@ namespace CMSXtream.Handlers
             if (input.Length >= 10) return $"({input.Substring(0, 1)})-{input.Substring(1, 3)}-{input.Substring(4, 3)}-{input.Substring(7)}";
             return input;
         }
+        public static string AddLeadingZero(string input)
+        {
+            if (input.Length == 9 && input.Substring(0)!="0")
+            {
+                return "0" + input;
+            } 
+            return input.Replace(" ", ""); ;
+        }
     }
 }
