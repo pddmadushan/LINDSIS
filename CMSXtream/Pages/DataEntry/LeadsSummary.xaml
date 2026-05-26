@@ -301,8 +301,11 @@
             <Grid>
             <DataGrid x:Name="grdGroups" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"  Height="auto" VerticalAlignment="Top" Background="White"
                       FontSize="12"   VirtualizingStackPanel.IsVirtualizing="False" d:ItemsSource="{d:SampleData}" RowHeaderWidth="0" HeadersVisibility="All" MinRowHeight="50"  Width="200" HorizontalAlignment="Left">
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="*" Header="Groups to come" >
+                    <DataGrid.Resources>
+                        <mycls:DoubleToVisaulConverter x:Key="DoubleToVis"/>
+                    </DataGrid.Resources>
+                    <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="*" Header="Group to come and Intake" >
                         <DataGridTemplateColumn.CellTemplate >
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical" Background="LightGreen">
@@ -312,7 +315,7 @@
                                             <ColumnDefinition Width="60"/>
                                         </Grid.ColumnDefinitions>
                                     <Label x:Name="lblLeadCount" FontWeight="Bold" Content="{Binding STD_COUNT}" HorizontalAlignment="Center" Width="auto" Grid.Column="0"/>
-                                        <mui:ModernButton x:Name="btnClsAttList" IconData="{Binding Data, Source={StaticResource ImgStudents}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="View Class Group Student" HorizontalAlignment="Center" Grid.Column="1" Click="btnClsAttList_Click"/>
+                                            <mui:ModernButton x:Name="btnClsAttList" IconData="{Binding Data, Source={StaticResource ImgStudents}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="View Class Group Student" HorizontalAlignment="Center" Grid.Column="1" Click="btnClsAttList_Click" Visibility="{Binding Path=VIEW_BTN_FLG,Converter={StaticResource DoubleToVis}}"/>
                                     </Grid>
                                     <Grid HorizontalAlignment="Center">
                                         <Grid.RowDefinitions>
@@ -324,7 +327,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTextColumn x:Name="clsGrp" Binding="{Binding CLS_ID}" Visibility="Hidden" Width="0"/>
+                    <DataGridTextColumn x:Name="clsGrp" Binding="{Binding CLS_ID}" Visibility="Hidden"/>
                 </DataGrid.Columns>
             </DataGrid>
                 <TextBlock x:Name="txtblckNoData" Visibility="Collapsed" TextWrapping="Wrap" Foreground="Red" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold">

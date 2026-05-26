@@ -51,7 +51,7 @@
                     </Grid.RowDefinitions>
                     <mui:ModernButton x:Name="btnRefresh"  Grid.Column="0" IconData="{Binding Data, Source={StaticResource ImgRefresh}}"  EllipseDiameter="20" EllipseStrokeThickness="1" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center" Width="22" Click="btnRefresh_Click" />
                     <Label FontSize="15" Grid.Column="0" Content="Search" Margin="39,0,0,0"/>
-                    <TextBox x:Name="txtSearch" Grid.Column="2" Height="30" VerticalAlignment="Bottom" TextChanged="txtSearch_TextChanged"/>                    
+                    <TextBox x:Name="txtSearch" Grid.Column="2" Height="30" VerticalAlignment="Bottom" TextChanged="txtSearch_TextChanged" PreviewKeyDown="txtSearch_PreviewKeyDown"/>                    
                     <Label FontSize="15" Grid.Column="4" Content="Labled Count :" Grid.ColumnSpan="2"/>
                     <Label x:Name="lblLabledStdCount" FontSize="15" Grid.Column="6" Content="" Grid.ColumnSpan="1" />
                     <mui:ModernButton x:Name="btnAddLead" Grid.Row="0" Grid.Column="8"  IconData="{Binding Data, Source={StaticResource ImgAddStudents}}"  EllipseDiameter="25" EllipseStrokeThickness="1" ToolTip="Add leads" Click="btnAddLead_Click"  />
@@ -128,7 +128,20 @@
                             </Style>
                         </DataGridTextColumn.CellStyle>
                     </DataGridTextColumn>
-                    <DataGridTemplateColumn x:Name="userInfo" Header="Info " Width="180"  >
+                    <DataGridTemplateColumn x:Name="userInfo" Header="Info " Width="180">
+                        <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Info" 
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"/>
+
+                                <TextBox Width="150"
+                         Margin="5,0,0,0"
+                         Name="txtSearch" PreviewKeyDown="txtSearch_PreviewKeyDown_1"/>
+                            </StackPanel>
+                        </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>

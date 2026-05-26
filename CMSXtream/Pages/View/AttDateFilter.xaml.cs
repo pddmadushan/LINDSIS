@@ -511,5 +511,16 @@ namespace CMSXtream.Pages.View
                 MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
             }
         }
+
+        private void txtSearch_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                System.Windows.Controls.TextBox txt = sender as System.Windows.Controls.TextBox;
+
+                Helper.ApplyInfoSearchFilter(txt, grdLeadData);
+            }
+        }
+
     }
 }

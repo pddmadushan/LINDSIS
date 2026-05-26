@@ -443,7 +443,7 @@ namespace CMSXtream.Pages.DataEntry
                     _user = int.Parse(selectedRowUser["USER_ID"].ToString());
                 }
 
-                if (_user == 0) return;
+                if (_user == 0 && StaticProperty.LoginisAdmin != "1") return;
 
                 CMSXtream.Pages.DataEntry.MyLeads MyLeadOpen = new CMSXtream.Pages.DataEntry.MyLeads();
                 if (grdLeadList.Items.Count - 1 == grdLeadList.SelectedIndex)

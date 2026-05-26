@@ -32,14 +32,17 @@ namespace CMSXtream.Pages.View
         int DeletedCount;
         System.Data.DataTable TblUsers;
         public static Boolean TotalClick = false;
+        DataTable dtLable = new DataTable();
         public DBSearch()
         {
+            dtLable.Columns.Add("LBL_ID", typeof(Int32));
             InitializeComponent();
             LoadcmbTpOrName();           
             GetUsersAddsCampaignsFromDB();
             LoadcmbAddOrCmp();
             CheckUserType();
             LoadP();
+            BindLabelGrid();
 
             dtpFromDate.SelectedDate = DateTime.Now;
             dtpToDate.SelectedDate = DateTime.Now;
@@ -128,7 +131,7 @@ namespace CMSXtream.Pages.View
                 //cmbAddOrCmp.Items.Add(new KeyValuePair<string, string>("2", "Add Name"));
                 cmbAddOrCmp.Items.Add(new KeyValuePair<string, string>("3", "Group"));
 
-                cmbAddOrCmp.SelectedValue = 3;
+                cmbAddOrCmp.SelectedValue = 1;
             }
             catch (Exception ex)
             {
@@ -239,8 +242,27 @@ namespace CMSXtream.Pages.View
             {
                 MessageBoxResult result=MessageBoxResult.Yes;
 
+                int selectedRowCount = 0;
+                int rowCount = grdLable.Items.Count;
+                if (rowCount > 0)
+                {
+                    for (int i = 0; i < rowCount; i++)
+                    {
+                        var selectedRow = (System.Data.DataRowView)grdLable.Items[i];
+                        int labelId = Int32.Parse(selectedRow["LBL_ID"].ToString());
+                        DataGridCell cell = GetCell(i, 0, grdLable);
+                        System.Windows.Controls.CheckBox chk = GetVisualChild<System.Windows.Controls.CheckBox>(cell);
+                        if (chk.IsChecked.Value)
+                        {
+                            selectedRowCount = selectedRowCount + 1; 
+                        }
+                    }
+                }
+
+                int getConvertedStudernt = chkStudent.IsChecked.Value ? 1 : 0;
+
                 if (txtbox.Text == string.Empty && int.Parse(cmbLoadedAddOrCmp.SelectedValue.ToString()) == -1
-                    && IsAttdateFiltered == 0 && IsdateFiltered == 0 && IsPrirityFiltered == 0)
+                    && IsAttdateFiltered == 0 && IsdateFiltered == 0 && IsPrirityFiltered == 0 && getConvertedStudernt==0 && selectedRowCount == 0)
                 {
                     if (IsAdmin != 1 || (IsAdmin == 1 && int.Parse(cmbUser.SelectedValue.ToString()) != -1))
                     {
@@ -317,31 +339,58 @@ namespace CMSXtream.Pages.View
                 if (filterByCmpOrAdd == 2)
                 {
                     addName = cmbLoadedAddOrCmp.Text;
+                }              
+
+                if (IsPrirityFiltered == 1) 
+                {
+                    prorityLevel = int.Parse(cmbP.SelectedValue.ToString());
                 }
+
+
+                dtLable.Clear();
+                int rowCount = grdLable.Items.Count;
+                if (rowCount > 0)
+                {
+                    for (int i = 0; i < rowCount; i++)
+                    {
+                        var selectedRow = (System.Data.DataRowView)grdLable.Items[i];
+                        int labelId = Int32.Parse(selectedRow["LBL_ID"].ToString());
+                        DataGridCell cell = GetCell(i, 0, grdLable);
+                        System.Windows.Controls.CheckBox chk = GetVisualChild<System.Windows.Controls.CheckBox>(cell);
+                        if (chk.IsChecked.Value)
+                        {
+                            dtLable.Rows.Add(labelId);
+                        }
+                    }
+                }
+
+                int isDateFilter = IsdateFiltered;
+                int isAttdateFiltered = IsAttdateFiltered;
                 if (txtbox.Text == string.Empty)
                 {
                     filteText = null;
                 }
                 else
                 {
-                    user = -1;
-                    cmpId = -1;
-                    filterByCmpOrAdd = -1;
                     filteText = txtbox.Text;
                     if (filterByNameOrPhone == 1 && filteText != null && filteText != "")
                     {
+                        user = -1;
+                        cmpId = -1;
+                        filterByCmpOrAdd = -1;
+                        dtLable.Clear();
+                        isDateFilter = 0;
+                        isAttdateFiltered = 0;
                         filteText = PhoneNumberFormatter.AddLeadingZero(filteText);
                     }
                 }
 
-                if (IsPrirityFiltered == 1) 
-                {
-                    prorityLevel = int.Parse(cmbP.SelectedValue.ToString());
-                }
+                int getConvertedStudernt = chkStudent.IsChecked.Value ? 1 : 0;
+
                 DataTable dt = new DataTable();
                 DBSearchDA search = new DBSearchDA();
-                dt = search.Search(user, fromDate, toDate, filterByNameOrPhone,
-                    filterByCmpOrAdd, cmpId, addName, filteText, IsAdmin, IsdateFiltered, fromAttDate, toAttDate, IsAttdateFiltered, prorityLevel).Tables[0];
+                dt = search.Search(dtLable, user, fromDate, toDate, filterByNameOrPhone,
+                    filterByCmpOrAdd, cmpId, addName, filteText, IsAdmin, isDateFilter, fromAttDate, toAttDate, isAttdateFiltered, prorityLevel, getConvertedStudernt).Tables[0];
                 grdLeadData.ItemsSource = dt.DefaultView;
 
                 var quarry = dt.AsEnumerable().Where(r => r.Field<string>("IS_REGISTERED") == "Yes");
@@ -760,7 +809,7 @@ namespace CMSXtream.Pages.View
 
         private void cmbTpOrName_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            txtbox.Text = "";
+            //txtbox.Text = "";
         }
 
         private void DataGrid_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -1112,6 +1161,152 @@ namespace CMSXtream.Pages.View
                 LogFile logger = new LogFile();
                 logger.MyLogFile(ex);
                 MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
+            }
+        }
+
+        private void lableTextSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchSting = lableTextSearch.Text.Trim();
+            if (searchSting != string.Empty)
+            {
+                Helper.searchGridByKey(grdLable, "LBL_DES", searchSting);
+            }
+        }
+
+        private void chkLblMark_Unchecked(object sender, RoutedEventArgs e)
+        {
+            UpdateLblInCount();
+        }
+
+        private void chkLblMark_Checked(object sender, RoutedEventArgs e)
+        {
+            UpdateLblInCount();
+        }
+        private void UpdateLblInCount()
+        {
+            try
+            {
+                    int rowCount = grdLable.Items.Count;
+                    int selectedCount = 0;
+                    string selectedList = "Selected Label List In:";
+                    if (rowCount > 0)
+                    {
+                        for (int i = 0; i < rowCount; i++)
+                        {
+                            var selectedRow = (System.Data.DataRowView)grdLable.Items[i];
+                            string displayName = selectedRow["LBL_DES"].ToString();
+                            DataGridCell cell = GetCell(i, 0, grdLable);
+                            System.Windows.Controls.CheckBox chk = GetVisualChild<System.Windows.Controls.CheckBox>(cell);
+                            if (chk.IsChecked.Value)
+                            {
+                                selectedCount = selectedCount + 1;
+                                selectedList = selectedList + "\n" + displayName;
+                            }
+                        }
+                    }
+                    lblIncount.Content = selectedCount.ToString();
+                    lblIncount.ToolTip = selectedList;
+            }
+            catch (Exception ex)
+            {
+                LogFile logger = new LogFile();
+                logger.MyLogFile(ex);
+                MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
+            }
+        }
+        private void BindLabelGrid()
+        {
+            try
+            {
+                LableDA _clsReason = new LableDA();
+                System.Data.DataTable table = _clsReason.SelectLable().Tables[0];
+                if (table.Rows.Count > 0)
+                {
+                    grdLable.ItemsSource = table.DefaultView;
+                }
+                else
+                {
+                    grdLable.ItemsSource = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogFile logger = new LogFile();
+                logger.MyLogFile(ex);
+                MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
+            }
+        }
+        private void chkLblMarkAll_Checked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                FristCellCheckUncheck(grdLable, true);
+                lblIncount.Content = grdLable.Items.Count.ToString();
+            }
+            catch (Exception ex)
+            {
+                LogFile logger = new LogFile();
+                logger.MyLogFile(ex);
+                MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
+            }
+        }
+        private void chkLblMarkAll_Unchecked(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                FristCellCheckUncheck(grdLable, false);
+                lblIncount.Content = "0";
+            }
+            catch (Exception ex)
+            {
+                LogFile logger = new LogFile();
+                logger.MyLogFile(ex);
+                MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
+            }
+        }
+        private void FristCellCheckUncheck(DataGrid dtGrid, Boolean checkStatus)
+        {
+            int rowCount = 0;
+            try
+            {
+                rowCount = dtGrid.Items.Count;
+                if (rowCount > 0)
+                {
+                    for (int i = 0; i < rowCount; i++)
+                    {
+                        DataGridCell cell = GetCell(i, 0, dtGrid);
+                        System.Windows.Controls.CheckBox chk = GetVisualChild<System.Windows.Controls.CheckBox>(cell);
+                        chk.IsChecked = checkStatus;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogFile logger = new LogFile();
+                logger.MyLogFile(ex);
+                MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
+            }
+        }
+
+        private void lableTextSearch_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                string searchSting = lableTextSearch.Text.Trim();
+                if (searchSting != string.Empty)
+                {
+                    Helper.searchGridByKey(grdLable, "LBL_DES", searchSting);
+                }
+            }
+        }
+
+        private void txtSearch_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                System.Windows.Controls.TextBox txt = sender as System.Windows.Controls.TextBox;
+
+                Helper.ApplyInfoSearchFilter(txt, grdLeadData);
             }
         }
     }

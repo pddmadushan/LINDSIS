@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Input;
 using System.Windows.Media;
 using XtreamDataAccess;
 
@@ -191,6 +192,17 @@ namespace CMSXtream.Pages.DataEntry
             if (searchSting != string.Empty)
             {
                 Helper.searchGridByKey(grdLable, "LBL_DES", searchSting);
+            }
+        }
+        private void txtLblDes_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                string searchSting = txtLblDes.Text.Trim();
+                if (searchSting != string.Empty)
+                {
+                    Helper.searchGridByKey(grdLable, "LBL_DES", searchSting);
+                }
             }
         }
 
@@ -513,8 +525,12 @@ namespace CMSXtream.Pages.DataEntry
         {
             if (chkNoMoreAttention.IsChecked != true && dtpAttendantDate.SelectedDate == null)
             {
-                MessageBox.Show("You can not save the record without Attending Date!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.No);
-                return false;
+                //MessageBox.Show("You can not save the record without Attending Date!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.No);
+                MessageBoxResult result = MessageBox.Show("Do you wan to save the record without Attending Date?", "Confirmation"/*box tttle*/, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result != MessageBoxResult.Yes)
+                {
+                    return false;
+                }
             }
             return true;
         }
@@ -660,5 +676,6 @@ namespace CMSXtream.Pages.DataEntry
                 MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
             }
         }
+
     }
 }

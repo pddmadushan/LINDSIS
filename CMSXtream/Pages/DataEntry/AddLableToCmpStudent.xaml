@@ -38,7 +38,7 @@
 
         <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
             <GroupBox.Header>
-                <TextBox Grid.Row="0" Grid.Column="1" Name="txtLblDes" TextAlignment="Left" TextChanged="txtLblDes_TextChanged" ToolTip="Search Lables" Width="250"  Margin="0,0,0,2"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Name="txtLblDes" TextAlignment="Left" TextChanged="txtLblDes_TextChanged" ToolTip="Search Lables" Width="250"  Margin="0,0,0,2" PreviewKeyDown="txtLblDes_PreviewKeyDown"/>
             </GroupBox.Header>
 
             <DataGrid x:Name="grdLable"  AutoGenerateColumns="False"  CanUserAddRows="False"  CanUserDeleteRows="False"

@@ -1517,5 +1517,14 @@ namespace CMSXtream.Pages.DataEntry
             }
         }
 
+        private void txtSearch_PreviewKeyDown_1(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                System.Windows.Controls.TextBox txt = sender as System.Windows.Controls.TextBox;
+                Helper.ApplyInfoSearchFilter(txt, grdStdData);
+            }
+        }
+
     }
 }

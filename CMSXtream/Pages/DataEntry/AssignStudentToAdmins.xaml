@@ -183,6 +183,19 @@
                     <DataGridTextColumn Width="90" Header="Mobile" Binding="{Binding Path=STD_TELEPHONE}" />
                     <DataGridTextColumn Width="130" Header="Up Date" Binding="{Binding Path=UPLOADED_DATE}"/>
                     <DataGridTemplateColumn x:Name="userInfo" Header="Info " Width="200"  >
+                        <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Info" 
+        FontWeight="Bold"
+        HorizontalAlignment="Center"/>
+
+                                <TextBox Width="150"
+      Margin="5,0,0,0"
+      Name="txtSearch" PreviewKeyDown="txtSearch_PreviewKeyDown_1"/>
+                            </StackPanel>
+                        </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>

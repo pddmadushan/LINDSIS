@@ -2,6 +2,7 @@
 using CMSXtream.Pages.View;
 using Microsoft.Office.Interop.Excel;
 using System;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlTypes;
 using System.Diagnostics.Eventing.Reader;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -1069,6 +1071,57 @@ namespace CMSXtream.Pages.DataEntry
             finally
             {
                 //Mouse.OverrideCursor = null;
+            }
+        }
+
+        private void txtSearch_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            try
+            {
+                if (e.Key == Key.Enter)
+                {
+                    string searchSting = txtSearch.Text.Trim();
+                    if (searchSting != string.Empty)
+                    {
+                        if (int.TryParse(searchSting, out int intValue))
+                        {
+                            Helper.searchGridByKey(grdMyCmpStd, "STD_TELEPHONE", searchSting);
+                        }
+                        else
+                        {
+                            Helper.searchGridByKey(grdMyCmpStd, "STD_FULL_NAME", searchSting);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogFile logger = new LogFile();
+                logger.MyLogFile(ex);
+                MessageBox.Show("System error has occurred.Please check log file!", StaticProperty.ClientName, MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.No);
+            }
+        }
+
+        private void ttxtSearch_PreviewKeyDown_1(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                System.Windows.Controls.TextBox txt = sender as System.Windows.Controls.TextBox;
+                string searchSting = txt.Text.Trim();
+                if (searchSting != string.Empty)
+                {
+                    Helper.searchGridByKey(grdMyCmpStd, "userInfo", searchSting);
+                }
+            }
+        
+        }
+
+        private void txtSearch_PreviewKeyDown_1(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                System.Windows.Controls.TextBox txt = sender as System.Windows.Controls.TextBox;
+                Helper.ApplyInfoSearchFilter(txt, grdMyCmpStd);
             }
         }
 

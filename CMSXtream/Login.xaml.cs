@@ -27,6 +27,7 @@ namespace WpfApplication2
         private void SetTestLogin()
         {
             txtUserName.Text = "sysadmin";
+            //txtUserName.Text = "VENURA";
             txtPassword.Password = "0772018009";
         }
         private void SetBackGrund()

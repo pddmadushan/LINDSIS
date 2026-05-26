@@ -109,6 +109,18 @@
                     </DataGridTemplateColumn>
                     <DataGridTextColumn x:Name="STD_TELEPHONE" Width="85" Binding="{Binding STD_TELEPHONE}" Header="Phone" Visibility="Visible"/>
                     <DataGridTemplateColumn x:Name="userInfo" Header="Info " Width="180"  >
+                        <DataGridTemplateColumn.HeaderTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Info" 
+               FontWeight="Bold"
+               HorizontalAlignment="Center"/>
+                                    <TextBox Width="150"
+             Margin="5,0,0,0"
+             Name="txtSearch" PreviewKeyDown="txtSearch_PreviewKeyDown"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.HeaderTemplate>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>
